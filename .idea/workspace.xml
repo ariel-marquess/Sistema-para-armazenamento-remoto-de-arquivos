@@ -2,20 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5aaa35cd-b481-418a-a74f-278bd82713e1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/Projeto-I_unidade.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/controls/check_user.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/controls/open_date.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/images/file.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/pages/create_account.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/pages/dashboard.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/pages/login.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
