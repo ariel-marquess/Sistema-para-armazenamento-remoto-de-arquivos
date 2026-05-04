@@ -5,12 +5,12 @@ from client_code.pages.create_account import Create
 from client_code.pages.dashboard import Dashboard
 
 
-def start_system():
+def start_login():
     app = Login(open_create = start_create, open_dashboard = start_dashboard)
     app.mainloop()
 
 def start_create():
-    app = Create()
+    app = Create(page_login = start_login)
     app.mainloop()
 
 def start_dashboard():
@@ -19,4 +19,4 @@ def start_dashboard():
 
 
 if __name__ == "__main__":
-    start_system()
+    start_create()
