@@ -4,8 +4,8 @@ from PIL import Image
 from CTkMessagebox import CTkMessagebox
 
 
-def show_messagebox():
-    message = CTkMessagebox(title="Inconsistência de dados", message="ERRO: usuário ou senha incorretos.", icon="warning")
+def show_messagebox():  # Método que abre um alerta informando que as informações disponibilizadas estão incorretas
+    CTkMessagebox(title="Inconsistência de dados", message="ERRO: usuário ou senha incorretos.", icon="warning")
 
 
 class Login(ctk.CTk):
@@ -14,10 +14,12 @@ class Login(ctk.CTk):
 
         self.geometry("800x600")
         self.title("Drive Docs")
+        self.configure(fg_color="#252525")
 
-        # Adicionando a imagem da página de login
+
+        # Adicionando a imagem da página
         try:
-            current_path = os.path.join(os.path.dirname(os.path.relpath(__file__)), "..", "client_code", "images", "file.png")
+            current_path = os.path.join(os.path.dirname(os.path.relpath(__file__)), "..", "images", "file.png")
 
             self.image = ctk.CTkImage(
                 light_image=Image.open(current_path),
@@ -27,15 +29,16 @@ class Login(ctk.CTk):
 
             self.label_image = ctk.CTkLabel(self, image=self.image, text="")
         except Exception as e:
-            self.label_image = ctk.CTkLabel(self, text="ERRO: Não foi possível encontrar a imagem.")
+            self.label_image = ctk.CTkLabel(self, text=f"ERRO: {e}")
         finally:
             self.label_image.grid(row=1, column=0, padx=20, pady=10, columnspan=3, sticky="nsew")
 
-        # Configurando grid
+        # Configurando as colunas da página
         self.grid_columnconfigure(0, weight=1)
         self.grid_columnconfigure(1, weight=3)
         self.grid_columnconfigure(2, weight=1)
 
+        # Configurando as linhas da página
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
 
@@ -57,7 +60,6 @@ class Login(ctk.CTk):
 
         self.container_password = ctk.CTkFrame(self.container, fg_color="transparent")
         self.container_password.grid(row=4, column=0, pady=5, sticky="nsew")
-
         self.container_password.grid_columnconfigure(0, weight=1)
         self.container_password.grid_columnconfigure(1, weight=0)
 
@@ -78,14 +80,14 @@ class Login(ctk.CTk):
         self.button_create.grid(row=5, column=2, padx=20, pady=20, sticky="se")
 
 
-    def reveal_password(self):
+    def reveal_password(self):  # Método para revelar ou esconder a senha digitada
         if self.entry_password.cget("show") == "*":
             self.entry_password.configure(show="")
         else:
             self.entry_password.configure(show="*")
 
 
-    def create_account(self):
+    def create_account(self):  # Método para abrir a página de "Criar conta"
         self.destroy()
         self.open_create()
 
@@ -96,7 +98,13 @@ class Login(ctk.CTk):
 
         if login == "admin" and password == "1234":
             self.destroy()
-            self.open_dashboard()
+            self.open_dashboard(
+                dic = {
+                    'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
+                    'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
+                    'type': ['pasta', 'pasta', 'pasta', 'arquivo']
+                }
+            )
         # elif isUser(login, password):
 
         else:
