@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5aaa35cd-b481-418a-a74f-278bd82713e1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client_code/controls/record_data.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_code/images/folder.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_code/images/toGo-gray.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_code/images/toGo-white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_code/images/toGoBack-gray.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_code/images/toGoBack-white.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_code/controls/check_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/controls/check_user.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client_code/controls/open_date.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/controls/open_data.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_code/pages/create_account.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/pages/create_account.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/pages/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/pages/dashboard.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_code/pages/login.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/pages/login.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -43,12 +46,13 @@
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/ariel_marquess/Documentos/Ariel_Marques/Redes/Redes_II/Projeto-I_unidade/Images&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/ariel_marquess/Documentos/Ariel_Marques/Redes/Redes_II/Projeto-I_unidade/client_code/images&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;
   }
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/client_code/images" />
       <recent name="$PROJECT_DIR$/Images" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -142,16 +146,5 @@
       <updated>1776366384301</updated>
     </task>
     <servers />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/client_code/main.py</url>
-          <line>20</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

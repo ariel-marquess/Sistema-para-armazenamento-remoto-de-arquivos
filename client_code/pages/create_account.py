@@ -6,7 +6,7 @@ from client_code.controls.record_data import record
 
 
 def MessageBox(title, message, icon):   # Método que cria uma caixa de mensagem quando executado
-    box = CTkMessagebox(title=title, message=message, icon=icon)
+    CTkMessagebox(title=title, message=message, icon=icon)
 
 
 class Create(ctk.CTk):
@@ -15,6 +15,7 @@ class Create(ctk.CTk):
 
         self.geometry("800x600")
         self.title("Drive Docs")
+        self.configure(fg_color="#252525")
 
         # Configurando colunas da página
         self.grid_columnconfigure(0, weight=1)

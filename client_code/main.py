@@ -19,4 +19,4 @@ def start_dashboard():
 
 
 if __name__ == "__main__":
-    start_create()
+    start_dashboard()

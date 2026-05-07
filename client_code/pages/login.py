@@ -5,7 +5,7 @@ from CTkMessagebox import CTkMessagebox
 
 
 def show_messagebox():  # Método que abre um alerta informando que as informações disponibilizadas estão incorretas
-    message = CTkMessagebox(title="Inconsistência de dados", message="ERRO: usuário ou senha incorretos.", icon="warning")
+    CTkMessagebox(title="Inconsistência de dados", message="ERRO: usuário ou senha incorretos.", icon="warning")
 
 
 class Login(ctk.CTk):
@@ -14,6 +14,8 @@ class Login(ctk.CTk):
 
         self.geometry("800x600")
         self.title("Drive Docs")
+        self.configure(fg_color="#252525")
+
 
         # Adicionando a imagem da página
         try:
@@ -27,7 +29,7 @@ class Login(ctk.CTk):
 
             self.label_image = ctk.CTkLabel(self, image=self.image, text="")
         except Exception as e:
-            self.label_image = ctk.CTkLabel(self, text="ERRO: Não foi possível encontrar a imagem.")
+            self.label_image = ctk.CTkLabel(self, text=f"ERRO: {e}")
         finally:
             self.label_image.grid(row=1, column=0, padx=20, pady=10, columnspan=3, sticky="nsew")
 
@@ -58,7 +60,6 @@ class Login(ctk.CTk):
 
         self.container_password = ctk.CTkFrame(self.container, fg_color="transparent")
         self.container_password.grid(row=4, column=0, pady=5, sticky="nsew")
-
         self.container_password.grid_columnconfigure(0, weight=1)
         self.container_password.grid_columnconfigure(1, weight=0)
 
@@ -97,7 +98,13 @@ class Login(ctk.CTk):
 
         if login == "admin" and password == "1234":
             self.destroy()
-            self.open_dashboard()
+            self.open_dashboard(
+                dic = {
+                    'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
+                    'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
+                    'type': ['pasta', 'pasta', 'pasta', 'arquivo']
+                }
+            )
         # elif isUser(login, password):
 
         else:
