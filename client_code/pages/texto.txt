@@ -1,18 +1,16 @@
+import os
 import customtkinter as ctk
+from PIL import Image
 
 try:
-    import client_code.controls.check_user as check
-    import client_code.controls.open_data as openData
     import client_code.controls.util as util
 except ImportError:
     util = None
-    check = None
-    openData = None
 
 
 class Login(ctk.CTk):
-    def __init__(self, open_create, open_dashboard):
-        super().__init__()
+    def __init__(self, open_create, open_dashboard, **kwargs):
+        super().__init__(**kwargs)
 
         self.geometry("800x600")
         self.title("Drive Docs")
@@ -41,8 +39,8 @@ class Login(ctk.CTk):
         self.label_login = ctk.CTkLabel(self.container, text="Login")
         self.label_login.grid(row=0, column=0, pady=0, sticky="w")
 
-        self.entry_username = ctk.CTkEntry(self.container)
-        self.entry_username.grid(row=1, column=0, pady=5, sticky="ew")
+        self.entry_login = ctk.CTkEntry(self.container)
+        self.entry_login.grid(row=1, column=0, pady=5, sticky="ew")
 
         # Adicionando os componentes para inserção da senha
         self.label_password = ctk.CTkLabel(self.container, text="Senha")
@@ -82,25 +80,21 @@ class Login(ctk.CTk):
         self.open_create()
 
 
-    def dashboard(self, data):
-        self.destroy()
-        self.open_dashboard(data)
-
-
     def enter(self):
-        username = self.entry_username.get()
+        login = self.entry_login.get()
         password = self.entry_password.get()
 
-        if username == "admin" and password == "1234":
-            dic = {
-                'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
-                'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
-                'type': ['pasta', 'pasta', 'pasta', 'arquivo']
-            }
+        if login == "admin" and password == "1234":
+            self.destroy()
+            self.open_dashboard(
+                dic = {
+                    'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
+                    'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
+                    'type': ['pasta', 'pasta', 'pasta', 'arquivo']
+                }
+            )
+        # elif isUser(login, password):
 
-            self.dashboard(dic)
-        elif check.isUser(username, password):
-            self.dashboard(openData.rootData(username))
         else:
             util.MessageBox(
                 title="Inconsistência de dados",

@@ -2,12 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5aaa35cd-b481-418a-a74f-278bd82713e1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client_code/images/folder.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/images/toGo-gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/images/toGo-white.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/images/toGoBack-gray.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client_code/images/toGoBack-white.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_code/controls/util.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/client_code/pages/texto.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/controls/check_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/controls/check_user.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/controls/file_handler.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/controls/file_handler.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/controls/open_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/controls/open_data.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/images/toGo-gray.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/images/toGo-white.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/images/toGoBack-gray.png" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/images/toGoBack-gray.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_code/images/toGoBack-white.png" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/images/toGoBack-white.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_code/pages/create_account.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/pages/create_account.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client_code/pages/dashboard.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/pages/dashboard.py" afterDir="false" />
@@ -42,6 +46,7 @@
     &quot;Python.create_account.executor&quot;: &quot;Debug&quot;,
     &quot;Python.dashboard.executor&quot;: &quot;Run&quot;,
     &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.teste.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -129,9 +134,33 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="teste" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="Projeto-I_unidade" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/client_code/pages" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="RUN_TOOL" value="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/client_code/pages/teste.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.teste" />
         <item itemvalue="Python.create_account" />
         <item itemvalue="Python.dashboard" />
       </list>
@@ -146,5 +175,20 @@
       <updated>1776366384301</updated>
     </task>
     <servers />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/client_code/main.py</url>
+          <line>20</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/client_code/pages/login.py</url>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

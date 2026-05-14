@@ -1,4 +1,4 @@
-def isUser(login, password):
+def isUser(username, password):
     # Este método deve verificar se o usuário está registrado no servidor (por meio do argumento 'login') e verificar se a senha do usuário está correta (por meio do argumento password).
     # Caso haja qualquer incossitência nos dados, retorne 'False'.
     # Se o usuário existir e a senha estiver correta, retorne 'True'.
