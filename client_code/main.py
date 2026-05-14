@@ -13,10 +13,10 @@ def start_create():
     app = Create(page_login = start_login)
     app.mainloop()
 
-def start_dashboard():
-    app = Dashboard()
+def start_dashboard(data):
+    app = Dashboard(data)
     app.mainloop()
 
 
 if __name__ == "__main__":
-    start_dashboard()
+    start_login()

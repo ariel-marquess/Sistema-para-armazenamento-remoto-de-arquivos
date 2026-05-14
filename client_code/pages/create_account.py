@@ -1,12 +1,13 @@
 import customtkinter as ctk
-from CTkMessagebox import CTkMessagebox
 
-from client_code.controls.check_user import isUsername
-from client_code.controls.record_data import record
-
-
-def MessageBox(title, message, icon):   # Método que cria uma caixa de mensagem quando executado
-    CTkMessagebox(title=title, message=message, icon=icon)
+try:
+    import client_code.controls.check_user as check
+    import client_code.controls.record_data as recData
+    import client_code.controls.util as util
+except ImportError:
+    isUsername = None
+    record = None
+    util = None
 
 
 class Create(ctk.CTk):
@@ -115,35 +116,35 @@ class Create(ctk.CTk):
 
         if infos.get('full name') != "" and infos.get('username') != "" and infos.get('address') != "" and infos.get('port') != "" and infos.get('password') != "" and infos.get('confirmation password') != "":   # Verifica se todos os campos da página foram preenchidos
             if infos.get('username').isalnum():
-                if not isUsername(infos.get('username')):
+                if not check.isUsername(infos.get('username')):
                     if infos.get('password') == infos.get('confirmation password'):
                         del infos['full name'], infos['address'], infos['port'], infos['confirmation password']   # Essas informações foram utilizadas somente para verificação ou para o processo chamado "encher linguiça" (não são necessárias no servidor).
 
                         try:
-                            record(infos)   # Registrando informações no servidor
+                            recData.record(infos)   # Registrando informações no servidor
 
                             self.destroy()
                             self.open_login()   # Abrindo novamente a página de login
                         except Exception as e:
-                            MessageBox(
+                            util.MessageBox(
                                 title="Ocorreu um erro inesperado",
                                 message=f'ERRO: {e}',
                                 icon="warning"
                             )
                 else:
-                    MessageBox(
+                    util.MessageBox(
                         title="Nome de usuário já existente",
                         message="ERRO: o nome de usuário digitado já está registrado no servidor.",
                         icon="warning"
                     )
             else:
-                MessageBox(
+                util.MessageBox(
                     title="Nome de usuário inválido",
                     message="ERRO: o nome de usuário não pode conter coracteres especiais, pontuações, letras acentuadas ou espaços.",
                     icon="warning"
                 )
         else:
-            MessageBox(
+            util.MessageBox(
                 title="Informações faltantes",
                 message="ERRO: você não preencheu todos os campos apontados na página.",
                 icon="warning"
