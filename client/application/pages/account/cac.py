@@ -112,7 +112,7 @@ class Create(ctk.CTkFrame):
             if infos.get('username').isalnum():
                 if not check.isUsername(infos.get('username')):
                     if infos.get('password') == infos.get('confirmation password'):
-                        del infos['full name'], infos['address'], infos['port'], infos['confirmation password']   # Essas informações foram utilizadas somente para verificação ou para o processo chamado "encher linguiça" (não são necessárias no servidor).
+                        del infos['full name'], infos['confirmation password']   # Essas informações foram utilizadas somente para verificação ou para o processo chamado "encher linguiça" (não são necessárias no servidor).
 
                         try:
                             recData.record(infos)   # Registrando informações no servidor
@@ -143,4 +143,3 @@ class Create(ctk.CTkFrame):
                 message="ERRO: você não preencheu todos os campos apontados na página.",
                 icon="warning"
             )
-
