@@ -1,22 +1,23 @@
 import socket
 import json
 
+# IP e Porta da rede interna da VM, para que as VMs possam se comunicar.
+SERVER_ADDRESS = '192.168.0.2'
+SERVER_PORT = 65432
+
 def record(obj):
-    # Este método deve registrar no servidor as informações passadas pelo dicionário 'obj'.
-    
-    # IP e Porta da rede interna da VM, para que as VMs possam se comunicar.
-    address = '192.168.0.2'
-    port = 65432
+    """
+    Este método se conecta ao servidor para registrar um novo usuário.
+    O dicionário 'obj' deve conter 'username' e 'password'.
+    Retorna True em caso de sucesso, False caso contrário.
+    """
     username = obj.get('username')
     password = obj.get('password')
 
     try:
-        # Criando o socket TCP
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            # Conectando ao servidor
-            s.connect((address, port))
+            s.connect((SERVER_ADDRESS, SERVER_PORT))
 
-            # Preparando os dados para envio (formato JSON)
             data_to_send = {
                 "command": "create_account",
                 "username": username,
@@ -24,17 +25,16 @@ def record(obj):
             }
             s.sendall(json.dumps(data_to_send).encode('utf-8'))
 
-            # Recebendo a resposta do servidor
             response = s.recv(1024).decode('utf-8')
             response_data = json.loads(response)
 
             if response_data.get("status") == "success":
-                print("Conta criada com sucesso!")
+                print("Conta criada com sucesso no servidor!")
                 return True
             else:
-                print(f"Falha ao criar conta: {response_data.get('message')}")
+                print(f"Falha ao criar conta no servidor: {response_data.get('message')}")
                 return False
 
     except Exception as e:
-        print(f"Ocorreu um erro na comunicação com o servidor: {e}")
+        print(f"Ocorreu um erro na comunicação ao criar conta: {e}")
         return False
