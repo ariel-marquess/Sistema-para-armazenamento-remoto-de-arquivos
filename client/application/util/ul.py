@@ -9,13 +9,23 @@ def MessageBox(title, message, icon):    # Método que cria uma caixa de mensage
     CTkMessagebox(title=title, message=message, icon=icon)
 
 
+def change_background(event, forced_widget, color):
+    target = forced_widget if forced_widget else event.widget
+    if not isinstance(target, ctk.CTkFrame):
+        target = target.master
+
+    target.configure(fg_color=color)
+
+
 def images(command, size=20):    # Método que retorna uma imagem quando chamado
     try:
+        currentFile = os.path.dirname(os.path.abspath(__file__))
         current = {
-            'folder': os.path.join(os.path.dirname(os.path.relpath(__file__)), "..", "images", "folder.png"),
-            'file': os.path.join(os.path.dirname(os.path.relpath(__file__)), "..", "images", "file.png"),
-            'tgbg': os.path.join(os.path.dirname(os.path.relpath(__file__)), "..", "images", "toGoBack-gray.png"),
-            'tgbw': os.path.join(os.path.dirname(os.path.relpath(__file__)), "..", "images", "toGoBack-white.png")
+            'close': os.path.join(currentFile, "../..", "images", "close.png"),
+            'folder': os.path.join(currentFile, "../..", "images", "folder.png"),
+            'file': os.path.join(currentFile, "../..", "images", "file.png"),
+            'tgbg': os.path.join(currentFile, "../..", "images", "toGoBack-gray.png"),
+            'tgbw': os.path.join(currentFile, "../..", "images", "toGoBack-white.png")
         }
 
         return ctk.CTkImage(
