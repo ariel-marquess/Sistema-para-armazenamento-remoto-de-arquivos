@@ -1,23 +1,14 @@
 import customtkinter as ctk
 
-try:
-    import client_code.controls.check_user as check
-    import client_code.controls.open_data as openData
-    import client_code.controls.util as util
-except ImportError:
-    util = None
-    check = None
-    openData = None
+import client.application.util.ul as util
 
 
-class Login(ctk.CTk):
-    def __init__(self, open_create, open_dashboard):
-        super().__init__()
+class Login(ctk.CTkFrame):
+    def __init__(self, master, open_create, open_dashboard):
+        super().__init__(master)
 
-        self.geometry("800x600")
-        self.title("Drive Docs")
         self.configure(fg_color="#252525")
-
+        self.grid(row=1, column=0, sticky="nsew")
 
         # Adicionando a imagem da página
         self.label_image = ctk.CTkLabel(self, image=util.images("file", 150), text="")
@@ -91,7 +82,7 @@ class Login(ctk.CTk):
         username = self.entry_username.get()
         password = self.entry_password.get()
 
-        if username == "admin" and password == "1234":
+        if username == "" and password == "":
             dic = {
                 'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
                 'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
@@ -99,8 +90,6 @@ class Login(ctk.CTk):
             }
 
             self.dashboard(dic)
-        elif check.isUser(username, password):
-            self.dashboard(openData.rootData(username))
         else:
             util.MessageBox(
                 title="Inconsistência de dados",

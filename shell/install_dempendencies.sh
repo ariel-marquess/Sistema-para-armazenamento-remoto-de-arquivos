@@ -1,0 +1,1 @@
+# Este código será usado para instalar os requisitos para execução do projeto no Debian (bibliotecas dos python, programas, etc.)

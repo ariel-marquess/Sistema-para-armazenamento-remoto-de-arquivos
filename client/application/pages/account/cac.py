@@ -1,22 +1,16 @@
 import customtkinter as ctk
 
-try:
-    import client_code.controls.check_user as check
-    import client_code.controls.record_data as recData
-    import client_code.controls.util as util
-except ImportError:
-    isUsername = None
-    record = None
-    util = None
+import client.protocols.check_user as check
+import client.protocols.record_data as recData
+import client.application.util.ul as util
 
 
-class Create(ctk.CTk):
-    def __init__(self, page_login):
-        super().__init__()
+class Create(ctk.CTkFrame):
+    def __init__(self, master, page_login):
+        super().__init__(master)
 
-        self.geometry("800x600")
-        self.title("Drive Docs")
         self.configure(fg_color="#252525")
+        self.grid(row=1, column=0, sticky="nsew")
 
         # Configurando colunas da página
         self.grid_columnconfigure(0, weight=1)
