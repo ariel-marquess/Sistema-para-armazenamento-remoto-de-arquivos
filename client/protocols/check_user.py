@@ -1,6 +1,6 @@
 import socket
 import json
-# aaa
+
 def isUser(username, password):
     # Este método verifica se o usuário e a senha correspondem aos registros do servidor.
     

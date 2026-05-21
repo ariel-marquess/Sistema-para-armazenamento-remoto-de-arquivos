@@ -1,7 +1,6 @@
 import customtkinter as ctk
 
-import client.protocols.check_user as check
-import client.protocols.record_data as recData
+import client.application.controls.ctrl as ctrl # Importando o novo controle unificado
 import client.application.util.ul as util
 
 
@@ -46,7 +45,9 @@ class Create(ctk.CTkFrame):
         self.entry_userName = ctk.CTkEntry(self.container_info)
         self.entry_userName.grid(row=1, column=2, padx=10, sticky="ew")
 
-        # Container para inserção dos componetes para incerção do endereço da máquina atual (a que se conectará ao servidor)
+        # Os campos de IP e Porta não são mais necessários no front-end,
+        # pois estão centralizados no ctrl.py, mas os mantemos por enquanto para não quebrar o layout.
+        # Em uma futura refatoração, podem ser removidos.
         self.container_address = ctk.CTkFrame(self, fg_color="transparent")
         self.container_address.grid(row=2, column=0, padx=20, pady=10, columnspan=3, sticky="ew")
         self.container_address.grid_columnconfigure(0, weight=1)
@@ -100,41 +101,35 @@ class Create(ctk.CTkFrame):
 
     def create(self):
         infos = {
-            'full name': self.entry_fullName.get(),
             'username': self.entry_userName.get(),
-            'address': self.entry_IP.get(),
-            'port': self.entry_port.get(),
             'password': self.entry_password.get(),
-            'confirmation password': self.entry_confirmPassword.get()
+            'confirmation_password': self.entry_confirmPassword.get()
         }
 
-        if infos.get('full name') != "" and infos.get('username') != "" and infos.get('address') != "" and infos.get('port') != "" and infos.get('password') != "" and infos.get('confirmation password') != "":   # Verifica se todos os campos da página foram preenchidos
+        if infos.get('username') != "" and infos.get('password') != "" and infos.get('confirmation_password') != "":
             if infos.get('username').isalnum():
-                if not check.isUsername(infos.get('username')):
-                    if infos.get('password') == infos.get('confirmation password'):
-                        del infos['full name'], infos['confirmation password']   # Essas informações foram utilizadas somente para verificação ou para o processo chamado "encher linguiça" (não são necessárias no servidor).
-
-                        try:
-                            recData.record(infos)   # Registrando informações no servidor
-
-                            self.destroy()
-                            self.open_login()   # Abrindo novamente a página de login
-                        except Exception as e:
-                            util.MessageBox(
-                                title="Ocorreu um erro inesperado",
-                                message=f'ERRO: {e}',
-                                icon="warning"
-                            )
+                if infos.get('password') == infos.get('confirmation_password'):
+                    # A verificação de usuário existente é feita no servidor
+                    if ctrl.record(infos):   # Registrando informações no servidor
+                        self.destroy()
+                        self.open_login()   # Abrindo novamente a página de login
+                    else:
+                        # A função record() já imprime a falha, mas podemos mostrar uma msg pro usuário
+                        util.MessageBox(
+                            title="Falha na Criação",
+                            message="ERRO: Não foi possível criar a conta. O nome de usuário pode já existir.",
+                            icon="warning"
+                        )
                 else:
                     util.MessageBox(
-                        title="Nome de usuário já existente",
-                        message="ERRO: o nome de usuário digitado já está registrado no servidor.",
+                        title="Senhas não coincidem",
+                        message="ERRO: A senha e a confirmação de senha não são iguais.",
                         icon="warning"
                     )
             else:
                 util.MessageBox(
                     title="Nome de usuário inválido",
-                    message="ERRO: o nome de usuário não pode conter coracteres especiais, pontuações, letras acentuadas ou espaços.",
+                    message="ERRO: o nome de usuário não pode conter caracteres especiais, pontuações, letras acentuadas ou espaços.",
                     icon="warning"
                 )
         else:

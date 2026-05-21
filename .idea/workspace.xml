@@ -5,7 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5aaa35cd-b481-418a-a74f-278bd82713e1" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/client_code/controls/check_user.py" beforeDir="false" afterPath="$PROJECT_DIR$/client_code/controls/check_user.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/server/server.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/application/controls/ctrl.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/application/controls/ctrl.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/application/pages/account/cac.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/application/pages/account/cac.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/application/pages/login/log.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/application/pages/login/log.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/protocols/record_data.py" beforeDir="false" afterPath="$PROJECT_DIR$/client/protocols/record_data.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -22,6 +28,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;heitorbrrt&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Ricardo-Bessa-dev/Sistema-para-armazenamento-remoto-de-arquivos.git&quot;,
+    &quot;accountId&quot;: &quot;67432e35-4c82-4a13-bccb-004f702e9510&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -30,30 +48,30 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.create_account.executor": "Debug",
-    "Python.dashboard.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.teste.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "heitor-branch-login",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/llula/OneDrive/Documentos/Project/Sistema-para-armazenamento-remoto-de-arquivos",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.create_account.executor&quot;: &quot;Debug&quot;,
+    &quot;Python.dashboard.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.teste.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;heitor-branch-login&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/llula/OneDrive/Documentos/Project/Sistema-para-armazenamento-remoto-de-arquivos&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/client_code/images" />
@@ -190,7 +208,11 @@
       <workItem from="1779045240801" duration="977000" />
       <workItem from="1779046268758" duration="529000" />
       <workItem from="1779046816260" duration="456000" />
-      <workItem from="1779047430568" duration="18307000" />
+      <workItem from="1779047430568" duration="20306000" />
+      <workItem from="1779127972136" duration="1392000" />
+      <workItem from="1779168438871" duration="524000" />
+      <workItem from="1779391144570" duration="813000" />
+      <workItem from="1779392004326" duration="436000" />
     </task>
     <servers />
   </component>

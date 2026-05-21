@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 import client.application.util.ul as util
-
+import client.application.controls.ctrl as ctrl # Importando os controles
 
 class Login(ctk.CTkFrame):
     def __init__(self, master, open_create, open_dashboard):
@@ -82,18 +82,25 @@ class Login(ctk.CTkFrame):
         username = self.entry_username.get()
         password = self.entry_password.get()
 
-        if username == "" and password == "":
-            dic = {
-                'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
-                'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
-                'type': ['pasta', 'pasta', 'pasta', 'arquivo']
-            }
-
-            self.dashboard(dic)
+        if username != "" and password != "":
+            if ctrl.isUser(username, password):
+                # A lógica para buscar os dados do dashboard ainda precisa ser implementada
+                # Por enquanto, passamos dados de exemplo.
+                mock_data = {
+                    'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
+                    'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
+                    'type': ['pasta', 'pasta', 'pasta', 'arquivo']
+                }
+                self.dashboard(mock_data)
+            else:
+                util.MessageBox(
+                    title="Inconsistência de dados",
+                    message="ERRO: usuário ou senha incorretos.",
+                    icon="warning"
+                )
         else:
             util.MessageBox(
-                title="Inconsistência de dados",
-                message="ERRO: usuário ou senha incorretos.",
+                title="Campos vazios",
+                message="ERRO: Preencha todos os campos.",
                 icon="warning"
             )
-
