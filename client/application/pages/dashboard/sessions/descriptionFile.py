@@ -1,5 +1,7 @@
 import customtkinter as ctk
 
+import client.application.controls.ctrl as ctrl
+
 class File(ctk.CTkFrame):
     def __init__(self, master, content):
         super().__init__(master)
@@ -15,7 +17,7 @@ class File(ctk.CTkFrame):
         self.label_contentFile = ctk.CTkLabel(self.container_scrollV, text=content, anchor="nw", justify="left")
         self.label_contentFile.grid(row=0, column=0, padx=20, pady=20, sticky="nsew")
 
-        self.button_downloadFile = ctk.CTkButton(self, text="Baixar arquivo", fg_color="#2b2f76")
+        self.button_downloadFile = ctk.CTkButton(self, text="Baixar arquivo", fg_color="#2b2f76", command=lambda p=path: ctrl.download(p))
         self.button_downloadFile.grid(row=1, column=0, padx=20, pady=20, sticky="e")
 
 

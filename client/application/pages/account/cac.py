@@ -5,7 +5,7 @@ import client.application.util.ul as util
 
 
 class Create(ctk.CTkFrame):
-    def __init__(self, master, page_login):
+    def __init__(self, master, open_login):
         super().__init__(master)
 
         self.configure(fg_color="#252525")
@@ -99,6 +99,11 @@ class Create(ctk.CTkFrame):
             self.entry_confirmPassword.configure(show="*")
 
 
+    def login(self):
+        self.destroy()
+        self.open_login()
+
+
     def create(self):
         infos = {
             'username': self.entry_userName.get(),
@@ -111,8 +116,7 @@ class Create(ctk.CTkFrame):
                 if infos.get('password') == infos.get('confirmation_password'):
                     # A verificação de usuário existente é feita no servidor
                     if ctrl.record(infos):   # Registrando informações no servidor
-                        self.destroy()
-                        self.open_login()   # Abrindo novamente a página de login
+                        self.login()
                     else:
                         # A função record() já imprime a falha, mas podemos mostrar uma msg pro usuário
                         util.MessageBox(

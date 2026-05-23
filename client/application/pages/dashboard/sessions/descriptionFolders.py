@@ -7,8 +7,7 @@ import client.application.controls.ctrl as ctrl
 
 class Folders(ctk.CTkScrollableFrame):
     def __init__(self, master, content):
-        self.master = master
-        super().__init__(self.master)
+        super().__init__(master)
 
         self.menu = None
         self.containers_description = []
@@ -24,7 +23,7 @@ class Folders(ctk.CTkScrollableFrame):
         self.configure(fg_color="#252525")
         self.grid(row=0, column=1, columnspan=3, sticky="nsew")
         self.columnconfigure(0, weight=1)
-        self.bind("<Button-3>", lambda e: self.open_menuFolder(e))
+        self.bind_background_menu()
 
         # Criando container que abrigará a descrição do conteúdo de cada pasta
         self.container_descriptionContent = ctk.CTkFrame(self, fg_color="#4e4e4e")
@@ -84,7 +83,7 @@ class Folders(ctk.CTkScrollableFrame):
             sort = childrens[2].cget('text')
 
             if sort == "pasta":
-                ctrl.openFolder(self.master, self, name)     # Tenho que adiv=cionar o caminho da pasta
+                ctrl.openFolder(self.master, self, name)     # Tenho que adicionar o caminho da pasta
             elif sort == "arquivo":
                 ctrl.openFile(self.master, self, name)
         except Exception as e:
@@ -105,10 +104,21 @@ class Folders(ctk.CTkScrollableFrame):
         if self.menu is not None and self.menu.winfo_exists():
             self.menu.destroy()
 
-        self.menu = self.menuFolder(self.master, event)
+        self.menu = self.menuFolder(
+            self.master,   # Será a referência para criação do menu
+            self,   # É a referência do descriptionFolder
+            self.menu,    # Indica o local (na máquina) onde o menu será criado
+            event)    # Indica o evento que disparou o método
 
     def open_menuFile(self, event, forced_widget=None):
         if self.menu is not None and self.menu.winfo_exists():
             self.menu.destroy()
 
-        self.menu = self.menuFile(self.master, event, forced_widget)
+        path = None    # Definir o caminho da pasta aqui                                                <<<
+        self.menu = self.menuFile(self.master, event, path, forced_widget)
+
+    def bind_background_menu(self):
+        self.bind("<Button-3>", self.open_menuFolder)
+
+        if hasattr(self, "_parent_canvas"):
+            self._parent_canvas.bind("<Button-3>", self.open_menuFolder)

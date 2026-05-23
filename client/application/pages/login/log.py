@@ -23,6 +23,9 @@ class Login(ctk.CTkFrame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
 
+        self.open_create = open_create  # Guardando função para abrir a página de 'criar conta'
+        self.open_dashboard = open_dashboard  # Guardando metodo para abrir a página principal do programa
+
         # Vamos colocar todos os labels e entrys (além do botão de entrar) em um container, isso deixará os componentes centralizados em relação à página
         self.container = ctk.CTkFrame(self, fg_color="transparent")
         self.container.grid(row=3, column=0, padx=200, pady=10, columnspan=3, sticky="ew")
@@ -32,7 +35,7 @@ class Login(ctk.CTkFrame):
         self.label_login = ctk.CTkLabel(self.container, text="Login")
         self.label_login.grid(row=0, column=0, pady=0, sticky="w")
 
-        self.entry_username = ctk.CTkEntry(self.container)
+        self.entry_username = ctk.CTkEntry(self.container, placeholder_text="Se estiver testando os gráficos, deixe em branco.")
         self.entry_username.grid(row=1, column=0, pady=5, sticky="ew")
 
         # Adicionando os componentes para inserção da senha
@@ -44,27 +47,26 @@ class Login(ctk.CTkFrame):
         self.container_password.grid_columnconfigure(0, weight=1)
         self.container_password.grid_columnconfigure(1, weight=0)
 
-        self.entry_password = ctk.CTkEntry(self.container_password, show="*")
+        self.entry_password = ctk.CTkEntry(self.container_password, show="*", placeholder_text="Se estiver testando os gráficos, deixe em branco.")
         self.entry_password.grid(row=0, column=0, padx=(0, 5), sticky="ew")
 
-        self.button_password = ctk.CTkButton(self.container_password, text="", fg_color="#2b2f76", width=50, command=self.reveal_password)
+        self.button_password = ctk.CTkButton(self.container_password, text="", fg_color="#2b2f76", image=util.images("eclosed"), width=50, command=self.reveal_password)
         self.button_password.grid(row=0, column=1)
 
         # Adicionando botões
-        self.open_create = open_create  # Guardando função para abrir a página de 'criar conta'
-        self.open_dashboard = open_dashboard  # Guardando metodo para abrir a página principal do programa
-
-        self.button_enter = ctk.CTkButton(self.container, text="Entrar", fg_color="#2b2f76", command=self.enter) # Botão de 'entrar'
+        self.button_enter = ctk.CTkButton(self.container, text="Entrar", fg_color="#2b2f76", command=self.enter)    # Botão de 'entrar'
         self.button_enter.grid(row=6, column=0, pady=20)
 
-        self.button_create = ctk.CTkButton(self, text="Não tem conta?", fg_color="#2b2f76", command=self.create_account) # Botão de 'criar conta'
+        self.button_create = ctk.CTkButton(self, text="Não tem conta?", fg_color="#2b2f76", command=self.create_account)    # Botão de 'criar conta'
         self.button_create.grid(row=5, column=2, padx=20, pady=20, sticky="se")
 
 
     def reveal_password(self):  # Método para revelar ou esconder a senha digitada
         if self.entry_password.cget("show") == "*":
+            self.button_password.configure(image=util.images("eclosed"))
             self.entry_password.configure(show="")
         else:
+            self.button_password.configure(image=util.images("eopen"))
             self.entry_password.configure(show="*")
 
 
@@ -99,8 +101,18 @@ class Login(ctk.CTkFrame):
                     icon="warning"
                 )
         else:
+            mock_data = {
+                'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
+                'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
+                'type': ['pasta', 'pasta', 'pasta', 'arquivo']
+            }
+            self.dashboard(mock_data)
+            """
+            Ao finalizar o programa este bloco ficará com o seguinte código:
+            
             util.MessageBox(
                 title="Campos vazios",
                 message="ERRO: Preencha todos os campos.",
                 icon="warning"
             )
+            """
