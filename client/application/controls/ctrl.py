@@ -1,8 +1,8 @@
-import os
-
 import client.application.util.ul as util
 import client.protocols.file_handler as file
 import client.protocols.open_data as openData
+import client.protocols.check_user as check_user # Importa o protocolo de verificação
+import client.protocols.record_data as record_data # Importa o protocolo de registro
 
 def download(path):
     try:
@@ -48,3 +48,17 @@ def openFile(master, currentSession, path = None):
 
         currentSession.destroy()
         master.session_contentFile(master, content_file)
+
+# --- Funções de Autenticação ---
+
+def isUser(username, password):
+    """
+    Chama o protocolo para verificar se o usuário e a senha são válidos.
+    """
+    return check_user.isUser(username, password)
+
+def record(obj):
+    """
+    Chama o protocolo para registrar um novo usuário.
+    """
+    return record_data.record(obj)

@@ -1,11 +1,40 @@
+import socket
+import json
+
 def isUser(username, password):
-    # Este método deve verificar se o usuário está registrado no servidor (por meio do argumento 'login') e verificar se a senha do usuário está correta (por meio do argumento password).
-    # Caso haja qualquer incossitência nos dados, retorne 'False'.
-    # Se o usuário existir e a senha estiver correta, retorne 'True'.
-    # Obs.: seria uma boa prática de segurança empacotar as informações de login e senha, antes de serem enviadas, utilizando o protocolo SSH (existe uma função para isso no Python).
-    return False
+    # Este método verifica se o usuário e a senha correspondem aos registros do servidor.
+    
+    # IP e Porta da rede interna da VM, para que as VMs possam se comunicar.
+    address = '192.168.0.2'
+    port = 65432
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+            s.connect((address, port))
+
+            # Prepara os dados para o pedido de login
+            data_to_send = {
+                "command": "login",
+                "username": username,
+                "password": password
+            }
+            s.sendall(json.dumps(data_to_send).encode('utf-8'))
+
+            # Recebe a resposta
+            response = s.recv(1024).decode('utf-8')
+            response_data = json.loads(response)
+
+            if response_data.get("status") == "success":
+                return True
+            else:
+                return False
+
+    except Exception as e:
+        print(f"Erro de conexão ao tentar fazer login: {e}")
+        return False
 
 def isUsername(username):
     # Este método deve verificar se o nome de usuário já está ou não sendo utilizado.
-    # Deve retornar 'True' se o nome de usuário já estiver registrado ou 'False' se o nome de usuário não estiver registrado.
+    # Por enquanto, esta função não está conectada ao servidor.
+    # A verificação real é feita no lado do servidor durante a criação da conta.
     return False
