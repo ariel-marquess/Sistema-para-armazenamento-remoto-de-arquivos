@@ -17,6 +17,19 @@ def change_background(event, forced_widget, color):
     target.configure(fg_color=color)
 
 
+def execute(master, function, args=None):
+    try:
+        function(*args)
+    except:
+        MessageBox(
+            title="Problema de execussão",
+            message=f"ERRO: {e}",
+            icon="warning"
+        )
+    finally:
+        master.destroy()
+
+
 def images(command, size=20):    # Método que retorna uma imagem quando chamado
     try:
         currentFile = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +38,9 @@ def images(command, size=20):    # Método que retorna uma imagem quando chamado
             'folder': os.path.join(currentFile, "../..", "images", "folder.png"),
             'file': os.path.join(currentFile, "../..", "images", "file.png"),
             'tgbg': os.path.join(currentFile, "../..", "images", "toGoBack-gray.png"),
-            'tgbw': os.path.join(currentFile, "../..", "images", "toGoBack-white.png")
+            'tgbw': os.path.join(currentFile, "../..", "images", "toGoBack-white.png"),
+            'eclosed': os.path.join(currentFile, "../..", "images", "eye-closed.png"),
+            'eopen': os.path.join(currentFile, "../..", "images", "eye-open.png")
         }
 
         return ctk.CTkImage(

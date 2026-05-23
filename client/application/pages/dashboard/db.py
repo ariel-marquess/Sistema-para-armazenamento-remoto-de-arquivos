@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
-import client.application.pages.dashboard.sessions.rootFolders as rootFolder
-import client.application.pages.dashboard.sessions.descriptionFolders as descriptionFolder
+import client.application.pages.dashboard.sessions.rootFolders as rfolder
+import client.application.pages.dashboard.sessions.descriptionFolders as dfolder
 
 
 class Dashboard(ctk.CTkFrame):
@@ -21,5 +21,5 @@ class Dashboard(ctk.CTkFrame):
         self.rowconfigure(0, weight=1)
 
         # Criando as seções da página
-        rootFolder.RootFolders(self, content)
-        descriptionFolder.Folders(self, content)
+        rfolder.RootFolders(self, content)
+        dfolder.Folders(self, content)

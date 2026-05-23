@@ -5,8 +5,7 @@ import client.application.controls.ctrl as ctrl
 
 class RootFolders(ctk.CTkFrame):
     def __init__(self, master, content):
-        self.master = master
-        super().__init__(self.master)
+        super().__init__(master)
 
         # Declarando variáveis que serão utilizadas posteriormente
         self.containers_rootFolder = []
@@ -24,7 +23,8 @@ class RootFolders(ctk.CTkFrame):
         self.container_header.columnconfigure(0, weight=1, uniform="equal")
         self.container_header.columnconfigure(2, weight=1, uniform="equal")
 
-        self.button_toGoBack = ctk.CTkButton(self.container_header, text="", image=util.images('tgbg'), fg_color="transparent", width=20)
+        self.button_toGoBack = ctk.CTkButton(self.container_header, text="", image=util.images('tgbg'), fg_color="transparent", width=20,
+                    command=lambda: self.toGoBack())
         self.button_toGoBack.grid(row=0, column=0, padx=5, sticky="w")
 
         self.label_rootFolder = ctk.CTkLabel(self.container_header, text="Arquivos", font=("Roboto", 14, "bold"))
@@ -55,27 +55,41 @@ class RootFolders(ctk.CTkFrame):
 
         array = [container, label_image, label_text]
         for component in array:
-            component.bind("<Button-1>", lambda e: self.actionClick(e, container))
-            component.bind("<Enter>", lambda e: self.change_background(event=e, forced_widget=(None if isinstance(component, ctk.CTkFrame) else container), color="#676767"))
-            component.bind("<Leave>", lambda e: self.change_background(event=e, forced_widget=(None if isinstance(component, ctk.CTkFrame) else container), color="transparent"))
+            component.bind("<Button-1>", lambda e, c=container: self.actionClick(e, c))
+            component.bind("<Enter>",
+                        lambda e, comp=component, c=container: self.change_background(event=e, forced_widget=(None if isinstance(comp, ctk.CTkFrame) else c), color="#676767"))
+            component.bind("<Leave>",
+                        lambda e, comp=component, c=container: self.change_background(event=e, forced_widget=(None if isinstance(comp, ctk.CTkFrame) else c), color="transparent"))
 
         self.containers_rootFolder.append(container)
 
 
     def actionClick(self, event, forced_widget=None):
-        target = forced_widget if forced_widget else event.widget
-
-        if isinstance(target, ctk.CTkLabel):
-            target = target.master
-
-        childrens = target.winfo_children()
-
         try:
-            name = childrens[1].cget('text')
+            target = forced_widget if forced_widget else event.widget
+
+            if isinstance(target, ctk.CTkLabel):
+                target = target.master
+
+            name = target.winfo_children()[1].cget('text')
             ctrl.openFolder(self.master, self, name)
         except Exception as e:
             util.MessageBox(
                 title="Não foi possível abrir a pasta",
+                message=f"ERRO: {e}",
+                icon="warning"
+            )
+
+
+    def toGoBack(self):
+        try:
+            path = None  # Tenho que faxer um mevanismo para voltar para a pasta anterior
+
+            descriptionFolder = self.master.winfo_childrens()[1]  # Retorna a segunda sessão da página Dashboard
+            ctrl.openFolder(self.master, descriptionFolder, path)
+        except Exception as e:
+            util.MessageBox(
+                title="Não foi possível retornar à pasta anterior",
                 message=f"ERRO: {e}",
                 icon="warning"
             )
