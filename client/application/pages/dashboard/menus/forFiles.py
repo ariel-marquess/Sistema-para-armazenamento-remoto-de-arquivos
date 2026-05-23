@@ -26,10 +26,10 @@ class menuFile(ctk.CTkFrame):
                 self.columnconfigure(0, weight=1)
                 self.rowconfigure(2, minsize=10)
 
-                download = ctk.CTkButton(self, text="Baixar", anchor="w", fg_color="transparent", command=lambda: self.download(name))    # Tenho que estabelecer qual será o diretório do arquivo
+                download = ctk.CTkButton(self, text="Baixar", anchor="w", fg_color="transparent", command=lambda: self.execute(ctrl.download))    # Tenho que estabelecer qual será o diretório do arquivo
                 download.grid(row=0, column=0, padx=10, pady=(5, 0), sticky="w")
 
-                delete = ctk.CTkButton(self, text="Apagar", anchor="w", fg_color="transparent", command=lambda: self.delete(name))
+                delete = ctk.CTkButton(self, text="Apagar", anchor="w", fg_color="transparent", command=lambda: self.execute(ctrl.delete))
                 delete.grid(row=1, column=0, padx=10, sticky="w")
 
                 canceler = ctk.CTkButton(self, text="Cancelar", anchor="w", fg_color="transparent", command=lambda: self.destroy())
@@ -45,3 +45,7 @@ class menuFile(ctk.CTkFrame):
                 message=f"ERRO: {e}",
                 icon="warning"
             )
+
+    def execute(self, function, args=None):
+        function(args)
+        self.destroy()
