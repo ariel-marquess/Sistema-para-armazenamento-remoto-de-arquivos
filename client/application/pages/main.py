@@ -5,7 +5,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-import client.application.util.ul as util
+import client.application.utils.ul as util
 from client.application.pages.login.log import Login
 from client.application.pages.account.cac import Create
 from client.application.pages.dashboard.db import Dashboard
