@@ -1,4 +1,4 @@
-import client.application.util.ul as util
+import client.application.utils.ul as util
 import client.application.pages.dashboard.sessions.descriptionFile as dfile
 import client.application.pages.dashboard.sessions.descriptionFolders as dfolder
 

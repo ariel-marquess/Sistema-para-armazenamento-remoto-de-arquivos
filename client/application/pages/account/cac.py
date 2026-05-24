@@ -1,7 +1,7 @@
 import customtkinter as ctk
 
 import client.application.controls.ctrl as ctrl # Importando o novo controle unificado
-import client.application.util.ul as util
+import client.application.utils.ul as util
 
 
 class Create(ctk.CTkFrame):

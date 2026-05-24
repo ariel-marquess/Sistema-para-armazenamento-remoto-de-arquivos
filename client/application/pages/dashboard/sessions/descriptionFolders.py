@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-import client.application.util.ul as util
+import client.application.utils.ul as util
 import client.application.pages.dashboard.menus.forFiles as mfile
 import client.application.pages.dashboard.menus.forFolders as mfolder
 import client.application.controls.ctrl as ctrl

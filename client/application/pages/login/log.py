@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-import client.application.util.ul as util
+import client.application.utils.ul as util
 import client.application.controls.ctrl as ctrl # Importando os controles
 
 class Login(ctk.CTkFrame):
