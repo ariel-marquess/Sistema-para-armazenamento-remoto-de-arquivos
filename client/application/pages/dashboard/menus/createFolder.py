@@ -4,7 +4,7 @@ import client.application.controls.ctrl as ctrl
 import client.application.pages.dashboard.menus.common.cmn as common
 
 class CreateFolder(ctk.CTkFrame):
-    def __init__(self, master, currentSession, path):
+    def __init__(self, master, currentSession, currentPath):
         super().__init__(master)
 
         self.configure(fg_color="#393939", corner_radius=10, border_width=1, width=400)
@@ -23,7 +23,7 @@ class CreateFolder(ctk.CTkFrame):
         self.canceler.grid(row=0, column=0, padx=5)
 
         self.create = ctk.CTkButton(self.container_buttons, text="Criar pasta", fg_color="#2b2f76", width=0, height=0,
-                    command=lambda cs=currentSession, p=path: self.actionClick(cs, p))
+                    command=lambda cs=currentSession, p=currentPath: self.actionClick(cs, p))
         self.create.grid(row=0, column=1, padx=5)
 
         common.center_menu(self.master, self)    # Centraliza o frame em relação à página
