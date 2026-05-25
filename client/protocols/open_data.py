@@ -16,8 +16,8 @@ def openFile(path):
     # O retorno não precisa ser em tipo especial.
     return False
 
-def rootData(username):
-    # Deve pegar o nome do usuário e retornar as informações contidas em sua pasta raiz.
-    # Retorne as informações utilizando a mesma estrutura orientada no "openFolder".
+def rootPath(username):
+    # Deve pegar o nome do usuário e retornar o caminho de sua pasta raiz.
+    # Retorne um caminho fromatado de um modo que possa ser manipulado pela biblioteca os.path.
     # Veja que, caso tenham sido levadas em cosideração as orientações do arquivo "record_data", o nome de usário será o nome da pasta que abriga as informações do próprio usuário.
-    return False
+    pass

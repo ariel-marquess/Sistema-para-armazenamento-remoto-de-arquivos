@@ -75,15 +75,15 @@ def createFolder(path, name, master, currentSession):
         )
 
 
-def openFolder(master, currentSession, path = None):
+def openFolder(master, currentSession, objPath = None):
     try:
         if path:
-            print(f'Abrindo pasta: {path}')
+            print(f'Abrindo pasta: {objPath}')
         else:
-            content_descriptionPath = openData.openFolder(path)
+            content_descriptionPath = openData.openFolder(objPath.getPath())
 
             currentSession.destroy()
-            dfolder.session_descriptionFolder(master, content_descriptionPath)
+            dfolder.session_descriptionFolder(master, content_descriptionPath, objPath)
     except Exception as e:
         util.MessageBox(
             title="Problema na abertura da pasta",
@@ -92,15 +92,15 @@ def openFolder(master, currentSession, path = None):
         )
 
 
-def openFile(master, currentSession, path = None):
+def openFile(master, currentSession, objPath = None):
     try:
         if path:
-            print(f'Abrindo arquivo: {path}')
+            print(f'Abrindo arquivo: {objPath}')
         else:
-            content_file = openData.openFile(path)
+            content_file = openData.openFile(objPath.getPath())
 
             currentSession.destroy()
-            dfile.session_contentFile(master, content_file)
+            dfile.session_contentFile(master, content_file, objPath.getPath())
     except Exception as e:
         util.MessageBox(
             title="Problema na abertura do arquivo",
@@ -121,3 +121,6 @@ def record(obj):
     Chama o protocolo para registrar um novo usuário.
     """
     return recordData.record(obj)
+
+def rootPath(username):
+    return openData.rootPath(username)

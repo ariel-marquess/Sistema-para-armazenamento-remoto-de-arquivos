@@ -44,13 +44,14 @@ class Main(ctk.CTk):
             master=self,
             open_login=self.start_login)
 
-    def start_dashboard(self, data):
+    def start_dashboard(self, data, rootPath):
         if self.container is not None:
             self.container.destroy()
 
         self.container = Dashboard(
             master=self,
-            content=data)
+            content=data,
+            path=rootPath)
 
     def center_window(self, width, heigth):
         screen_width = self.winfo_screenwidth()
