@@ -15,6 +15,7 @@ class CreateFolder(ctk.CTkFrame):
 
         self.entry = ctk.CTkEntry(self, placeholder_text="Digite o nome da pasta...")
         self.entry.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
+        self.entry.bind("<Return>", lambda e, cs, cp: self.actionClick(cs, cp))
 
         self.container_buttons = ctk.CTkFrame(self, fg_color="transparent")
         self.container_buttons.grid(row=2, column=0, pady=5)

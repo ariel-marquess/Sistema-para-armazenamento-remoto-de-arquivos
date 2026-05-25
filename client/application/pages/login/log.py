@@ -37,6 +37,7 @@ class Login(ctk.CTkFrame):
 
         self.entry_username = ctk.CTkEntry(self.container, placeholder_text="Se estiver testando os gráficos, deixe em branco.")
         self.entry_username.grid(row=1, column=0, pady=5, sticky="ew")
+        self.entry_username.bind("<Return>", lambda e: self.enter())
 
         # Adicionando os componentes para inserção da senha
         self.label_password = ctk.CTkLabel(self.container, text="Senha")
@@ -49,12 +50,13 @@ class Login(ctk.CTkFrame):
 
         self.entry_password = ctk.CTkEntry(self.container_password, show="*", placeholder_text="Se estiver testando os gráficos, deixe em branco.")
         self.entry_password.grid(row=0, column=0, padx=(0, 5), sticky="ew")
+        self.entry_password.bind("<Return>", lambda e: self.enter())
 
         self.button_password = ctk.CTkButton(self.container_password, text="", fg_color="#2b2f76", image=util.images("eclosed"), width=50, command=self.reveal_password)
         self.button_password.grid(row=0, column=1)
 
         # Adicionando botões
-        self.button_enter = ctk.CTkButton(self.container, text="Entrar", fg_color="#2b2f76", command=self.enter)    # Botão de 'entrar'
+        self.button_enter = ctk.CTkButton(self.container, text="Entrar", fg_color="#2b2f76", command=self.enter())    # Botão de 'entrar'
         self.button_enter.grid(row=6, column=0, pady=20)
 
         self.button_create = ctk.CTkButton(self, text="Não tem conta?", fg_color="#2b2f76", command=self.create_account)    # Botão de 'criar conta'
