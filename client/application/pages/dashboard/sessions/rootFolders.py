@@ -1,11 +1,12 @@
 import customtkinter as ctk
 
-import client.application.util.ul as util
+import client.application.utils.ul as util
 import client.application.controls.ctrl as ctrl
 
 class RootFolders(ctk.CTkFrame):
-    def __init__(self, master, content):
+    def __init__(self, master, content, objPath):
         super().__init__(master)
+        self.objPath = objPath
 
         # Declarando variáveis que serão utilizadas posteriormente
         self.containers_rootFolder = []
@@ -72,7 +73,10 @@ class RootFolders(ctk.CTkFrame):
                 target = target.master
 
             name = target.winfo_children()[1].cget('text')
-            ctrl.openFolder(self.master, self, name)
+
+            self.objPath.joinRoot(name)
+            self.objPath.addLastPath(self.objPath.getPath())
+            ctrl.openFolder(self.master, self, self.objPath.getPath())
         except Exception as e:
             util.MessageBox(
                 title="Não foi possível abrir a pasta",

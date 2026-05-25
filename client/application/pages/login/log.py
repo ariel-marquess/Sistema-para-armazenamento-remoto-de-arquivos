@@ -1,6 +1,6 @@
 import customtkinter as ctk
 
-import client.application.util.ul as util
+import client.application.utils.ul as util
 import client.application.controls.ctrl as ctrl # Importando os controles
 
 class Login(ctk.CTkFrame):
@@ -75,9 +75,9 @@ class Login(ctk.CTkFrame):
         self.open_create()
 
 
-    def dashboard(self, data):
+    def dashboard(self, data, path):
         self.destroy()
-        self.open_dashboard(data)
+        self.open_dashboard(data, path)
 
 
     def enter(self):
@@ -93,7 +93,9 @@ class Login(ctk.CTkFrame):
                     'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
                     'type': ['pasta', 'pasta', 'pasta', 'arquivo']
                 }
-                self.dashboard(mock_data)
+
+
+                self.dashboard(mock_data, ctrl.rootPath(username))
             else:
                 util.MessageBox(
                     title="Inconsistência de dados",

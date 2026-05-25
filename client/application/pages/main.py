@@ -5,7 +5,7 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../..
 if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
-import client.application.util.ul as util
+import client.application.utils.ul as util
 from client.application.pages.login.log import Login
 from client.application.pages.account.cac import Create
 from client.application.pages.dashboard.db import Dashboard
@@ -44,13 +44,14 @@ class Main(ctk.CTk):
             master=self,
             open_login=self.start_login)
 
-    def start_dashboard(self, data):
+    def start_dashboard(self, data, rootPath):
         if self.container is not None:
             self.container.destroy()
 
         self.container = Dashboard(
             master=self,
-            content=data)
+            content=data,
+            path=rootPath)
 
     def center_window(self, width, heigth):
         screen_width = self.winfo_screenwidth()
