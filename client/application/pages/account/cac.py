@@ -83,7 +83,7 @@ class Create(ctk.CTkFrame):
         self.checkBox_seePassword = ctk.CTkCheckBox(self, text="Mostrar senha", command=self.reveal_password)
         self.checkBox_seePassword.grid(row=8, column=0, padx=20, pady=10)
 
-        self.open_login = page_login   # Método que abrirá a página de login
+        self.open_login = open_login   # Método que abrirá a página de login
 
         # Botão para submissão das informações
         self.button_createAccount = ctk.CTkButton(self, fg_color="#2b2f76", text="Criar conta", command=self.create)
