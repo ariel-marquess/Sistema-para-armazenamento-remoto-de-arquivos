@@ -63,3 +63,47 @@ Este documento resume as principais alterações que fiz no código para impleme
 *   **Por que eu modifiquei:** Para documentar todo o processo de configuração do ambiente, os problemas que enfrentei e as soluções, além de registrar as mudanças feitas no código. Isso vai ajudar o resto da equipe a se atualizar e a configurar seus próprios ambientes sem passar pelas mesmas dificuldades.
 
 ---
+
+# Diário de Alterações no Código - Backend (Ricardo)
+
+Esta seção registra as mudanças feitas por Ricardo para completar as operações principais do back-end e organizar melhor os arquivos do projeto.
+
+---
+
+### 1. Implementações no back-end (`server/server.py`)
+
+*   **O que eu modifiquei:** Ampliei o servidor para suportar as principais operações de um sistema de armazenamento remoto.
+    1.  **Criação automática de pastas de usuário:** O servidor passou a usar `server/storage/` como diretório principal de armazenamento e cria uma pasta específica para cada usuário.
+    2.  **Listagem de arquivos:** Implementei o comando `list_folder`, que retorna nomes, tamanhos e tipos dos itens dentro da pasta do usuário.
+    3.  **Criação de pastas:** Implementei o comando `create_folder`, permitindo criar diretórios dentro do espaço do usuário.
+    4.  **Leitura de arquivo de texto:** Implementei o comando `read_file`, usado para abrir arquivos de texto UTF-8.
+    5.  **Exclusão de arquivo:** Implementei o comando `delete_file`, permitindo apagar arquivos do usuário sem remover pastas.
+    6.  **Upload de arquivo:** Implementei o comando `upload_file`, permitindo salvar arquivos enviados pelo cliente.
+    7.  **Download de arquivo:** Implementei o comando `download_file`, permitindo recuperar arquivos armazenados no servidor.
+    8.  **Suporte a arquivos binários:** Usei Base64 para transportar arquivos binários dentro das mensagens JSON.
+    9.  **Proteção contra caminhos inválidos:** Adicionei validação para impedir acessos como `../`, evitando que o cliente saia da pasta do usuário.
+    10. **Validação de nomes de pasta:** Adicionei uma checagem para impedir nomes vazios, `.`/`..` e caminhos compostos no nome da nova pasta.
+    11. **Buffer maior:** Aumentei o buffer de recebimento para `10 MB`, pois upload e download em Base64 geram mensagens maiores.
+
+*   **Por que eu modifiquei:** Essas funções eram necessárias para aproximar o servidor dos requisitos da atividade avaliativa: autenticação, criação de espaço de armazenamento por usuário, listagem, upload, download e persistência dos arquivos no disco da VM do servidor.
+
+### 2. Organização de arquivos e documentação
+
+*   **O que eu modifiquei:** Organizei arquivos que estavam sobrando ou com função pouco clara no estado atual do projeto.
+    1.  **Exclusão de `server_storage/`:** Removi a pasta antiga porque o armazenamento atual passou a ser feito em `server/storage/`.
+    2.  **Exclusão de `server/data/`:** Removi a pasta `server/data/`, pois ela não estava sendo usada pelo servidor atual.
+    3.  **Exclusão de `README-HEITOR.md`:** Removi o arquivo por estar desnecessário diante da nova documentação centralizada.
+    4.  **Renomeação de `README.md`:** Renomeei o README antigo para `TESTING_INSTRUCTIONS.md`, pois seu conteúdo estava mais relacionado a instruções de ambiente e testes.
+    5.  **Criação de novo `README.md`:** Criei um novo README com a descrição geral do projeto, contexto da atividade, arquitetura, protocolo, comandos implementados, execução e limitações atuais.
+
+*   **Observação:** O novo `README.md` ainda pode ser atualizado e mesclado com `TESTING_INSTRUCTIONS.md` quando o projeto estiver finalizado, para deixar a documentação de entrega mais limpa e centralizada.
+
+### 3. Correções e ajustes para teste local
+
+*   **O que eu modifiquei:** Fiz pequenos ajustes necessários para conseguir testar o projeto durante o desenvolvimento.
+    1.  **Correção em `client/application/pages/account/cac.py`:** Na linha 86, alterei `self.open_login = page_login` para `self.open_login = open_login`, pois `page_login` não existia e causava erro ao abrir/usar a tela de criação de conta.
+    2.  **Alteração de IP para testes:** Ajustei o endereço IP configurado no cliente para fins de teste local. Esse IP deve ser verificado antes de testar em outra máquina ou antes da demonstração em VMs diferentes.
+
+*   **Por que eu modifiquei:** A correção no `cac.py` evita erro de referência inexistente, e a alteração de IP foi necessária para testar cliente e servidor no ambiente local de desenvolvimento.
+
+---
