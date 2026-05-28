@@ -1,108 +1,427 @@
-# Configuração do Ambiente de Desenvolvimento (Backend)
+# Sistema de Armazenamento Remoto com Sockets TCP
 
-Este documento descreve os passos necessários para configurar uma máquina virtual Debian 13 (Trixie) no VirtualBox para rodar o servidor backend deste projeto.
+Este projeto implementa um sistema de armazenamento remoto, semelhante a um Drive simples, usando a arquitetura cliente/servidor com sockets TCP. Ele foi desenvolvido como atividade avaliativa da disciplina de Redes de Computadores.
 
----
+O objetivo principal é aplicar conceitos de comunicação em rede, transferência confiável de dados, autenticação básica, gerenciamento de diretórios e persistência de arquivos em disco.
 
-## 1. Configuração da VM Debian (Passo único)
+## Contexto da Atividade
 
-Estes passos preparam a máquina virtual para se comunicar com o VirtualBox e com a sua máquina host.
+A atividade propõe o desenvolvimento de um sistema de Drive usando sockets TCP, com cliente e servidor executando em máquinas virtuais diferentes, preferencialmente usando Debian no VirtualBox.
 
-### 1.1. Habilitar Repositórios Adicionais
+O projeto explora:
 
-1.  Abra o terminal e edite o arquivo `sources.list`:
-    ```bash
-    sudo nano /etc/apt/sources.list
-    ```
-2.  Adicione `contrib non-free non-free-firmware` ao final de cada linha `deb`. O arquivo deve ficar similar a este:
-    ```bash
-    deb http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware
-    deb-src http://deb.debian.org/debian/ trixie main contrib non-free non-free-firmware
-    # ... e assim por diante para as outras linhas
-    ```
-3.  Salve (`Ctrl+X`, `Y`, `Enter`) e atualize a lista de pacotes:
-    ```bash
-    sudo apt update
-    ```
+- programação de aplicações em rede;
+- modelo cliente-servidor;
+- gerenciamento de conexões TCP;
+- criação de um protocolo simples de aplicação;
+- autenticação básica;
+- listagem de arquivos;
+- upload e download;
+- persistência dos dados no disco da VM do servidor.
 
-### 1.2. Instalar o VirtualBox Guest Additions
+## Tecnologias Utilizadas
 
-1.  **Instale as dependências:**
-    ```bash
-    sudo apt install build-essential dkms linux-headers-$(uname -r)
-    ```
-2.  **Insira o CD do Guest Additions:** No menu da janela da VM, clique em **Dispositivos > Inserir imagem de CD dos Adicionais para Convidado...**.
-3.  **Monte e execute o instalador:**
-    ```bash
-    sudo mkdir -p /media/cdrom
-    sudo mount /dev/cdrom /media/cdrom
-    sudo sh /media/cdrom/VBoxLinuxAdditions.run
-    ```
+- Python 3
+- `socket` para comunicação TCP
+- JSON para troca de mensagens entre cliente e servidor
+- Base64 para transporte de arquivos binários
+- `customtkinter` para a interface gráfica do cliente
+- `Pillow` para carregar imagens da interface
+- `CTkMessagebox` para mensagens gráficas
+- VirtualBox para executar cliente e servidor em VMs diferentes
+- Debian/Linux como ambiente recomendado
 
----
+## Estrutura do Projeto
 
-## 2. Configuração da Pasta Compartilhada
+```text
+.
+├── client/
+│   ├── application/
+│   │   ├── controls/
+│   │   │   └── ctrl.py
+│   │   ├── pages/
+│   │   │   ├── account/
+│   │   │   ├── dashboard/
+│   │   │   ├── login/
+│   │   │   └── main.py
+│   │   └── util/
+│   │       └── ul.py
+│   ├── images/
+│   └── protocols/
+│       ├── check_user.py
+│       ├── record_data.py
+│       ├── open_data.py
+│       ├── file_handler.py
+│       └── creators/
+│           └── mkdir.py
+├── server/
+│   ├── server.py
+│   ├── data/
+│   └── storage/
+├── shell/
+├── README-HEITOR.md
+└── README.md
+```
 
-Isso permite que o código do projeto apareça dentro da VM.
+## Visão Geral
 
-### 2.1. Configurar no VirtualBox
+O sistema é dividido em duas partes:
 
-1.  Com a VM desligada, vá em **Configurações da VM > Pastas Compartilhadas**.
-2.  Clique no ícone `+` para adicionar uma nova pasta.
-    *   **Caminho da Pasta:** Selecione a pasta raiz do seu projeto.
-    *   **Nome da Pasta:** Dê um nome simples, como `projeto_drive`. **Anote este nome.**
-    *   **Opções:** Marque **Montar Automaticamente** e **Tornar Permanente**.
+- **Servidor:** recebe conexões TCP, processa comandos em JSON, gerencia usuários e manipula arquivos no disco.
+- **Cliente:** fornece uma interface gráfica para login, criação de conta e navegação pelos arquivos.
 
-### 2.2. Corrigir Permissões na VM
+O servidor escuta na porta `65432` e usa o host `0.0.0.0`, permitindo conexões vindas de outras máquinas da rede.
 
-1.  **Crie o grupo `vboxsf`** (se ele não existir):
-    ```bash
-    sudo groupadd vboxsf
-    ```
-2.  **Adicione seu usuário ao grupo:**
-    ```bash
-    sudo adduser $USER vboxsf
-    ```
-3.  **Reinicie a VM** para que tudo seja aplicado:
-    ```bash
-    sudo reboot
-    ```
+## Servidor
 
----
+O arquivo principal do servidor é:
 
-## 3. Como Executar o Servidor (Uso Diário)
+```text
+server/server.py
+```
 
-Após a configuração, siga estes passos para rodar o backend.
+Ele é responsável por:
 
-1.  Inicie a VM do Servidor e abra o terminal.
+- abrir o socket TCP;
+- aceitar conexões de clientes;
+- receber mensagens JSON;
+- identificar o comando solicitado;
+- executar operações de autenticação e armazenamento;
+- responder ao cliente em JSON.
 
-2.  **Verifique se a pasta compartilhada montou automaticamente.** O local padrão é `/media/sf_<nome_da_pasta>`.
-    ```bash
-    ls /media/
-    ```
-    Se você vir sua pasta (ex: `sf_projeto_drive`), pule para o passo 4.
+Os dados persistentes ficam em:
 
-3.  **Se a pasta não apareceu (Solução Manual):**
-    A montagem automática pode falhar. Use o comando de montagem manual que sabemos que funciona.
-    ```bash
-    # Crie um ponto de montagem (só precisa fazer isso uma vez)
-    sudo mkdir -p /mnt/share
+```text
+server/storage/
+```
 
-    # Monte a pasta (use o "Nome da Pasta" do passo 2.1)
-    sudo mount -t vboxsf projeto_drive /mnt/share
-    ```
-    Neste caso, seu projeto estará em `/mnt/share`.
+O arquivo de usuários fica em:
 
-4.  **Navegue até a pasta do projeto e execute o servidor:**
-    *   **Se a montagem automática funcionou:**
-        ```bash
-        cd /media/sf_projeto_drive/
-        python3 server.py
-        ```
-    *   **Se você usou a montagem manual:**
-        ```bash
-        cd /mnt/share/
-        python3 server.py
-        ```
+```text
+server/storage/users.json
+```
 
-O servidor estará rodando. Para encontrar o IP do servidor, use o comando `ip addr show`. A porta padrão é `65432`.
+Cada usuário possui uma pasta própria:
+
+```text
+server/storage/
+├── users.json
+├── ana/
+│   ├── nota.txt
+│   └── Documentos/
+└── joao/
+    └── imagem.png
+```
+
+## Cliente
+
+O arquivo principal do cliente gráfico é:
+
+```text
+client/application/pages/main.py
+```
+
+Ele cria a janela principal e alterna entre:
+
+- tela de login;
+- tela de criação de conta;
+- dashboard de arquivos.
+
+Os arquivos de protocolo do cliente ficam em:
+
+```text
+client/protocols/
+```
+
+Eles representam a camada que deve conversar com o servidor:
+
+- `check_user.py`: login;
+- `record_data.py`: criação de conta;
+- `open_data.py`: listagem e abertura de dados;
+- `file_handler.py`: upload, download e exclusão;
+- `creators/mkdir.py`: criação de pastas.
+
+## Protocolo de Comunicação
+
+A comunicação entre cliente e servidor é feita com JSON sobre sockets TCP.
+
+Toda requisição possui o campo `command`:
+
+```json
+{
+  "command": "nome_do_comando"
+}
+```
+
+Resposta de sucesso:
+
+```json
+{
+  "status": "success"
+}
+```
+
+Resposta de erro:
+
+```json
+{
+  "status": "error",
+  "message": "Descrição do erro."
+}
+```
+
+## Comandos Implementados no Servidor
+
+### Criar Conta
+
+Cria um novo usuário e uma pasta exclusiva para ele.
+
+```json
+{
+  "command": "create_account",
+  "username": "ana",
+  "password": "123"
+}
+```
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "message": "Conta criada com sucesso."
+}
+```
+
+### Login
+
+Verifica usuário e senha.
+
+```json
+{
+  "command": "login",
+  "username": "ana",
+  "password": "123"
+}
+```
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "message": "Login bem-sucedido."
+}
+```
+
+### Listar Pasta
+
+Lista arquivos e pastas dentro do espaço do usuário.
+
+```json
+{
+  "command": "list_folder",
+  "username": "ana",
+  "path": ""
+}
+```
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "data": {
+    "name": ["Documentos", "nota.txt"],
+    "size": ["0 itens", "12 bytes"],
+    "type": ["pasta", "arquivo"]
+  }
+}
+```
+
+O campo `path` é relativo à pasta do usuário. Para listar a raiz, use `""`.
+
+### Criar Pasta
+
+Cria uma pasta dentro do espaço do usuário.
+
+```json
+{
+  "command": "create_folder",
+  "username": "ana",
+  "path": "",
+  "folder_name": "Documentos"
+}
+```
+
+Também são aceitos `folderName` ou `name` no lugar de `folder_name`.
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "message": "Pasta criada com sucesso."
+}
+```
+
+### Ler Arquivo
+
+Lê o conteúdo textual de um arquivo UTF-8.
+
+```json
+{
+  "command": "read_file",
+  "username": "ana",
+  "path": "Documentos/nota.txt"
+}
+```
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "data": "Conteúdo do arquivo"
+}
+```
+
+Esse comando é indicado para visualizar arquivos de texto. Para baixar qualquer tipo de arquivo, use `download_file`.
+
+### Apagar Arquivo
+
+Remove um arquivo do usuário.
+
+```json
+{
+  "command": "delete_file",
+  "username": "ana",
+  "path": "Documentos/nota.txt"
+}
+```
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "message": "Arquivo apagado com sucesso."
+}
+```
+
+Esse comando apaga apenas arquivos. Ele não remove pastas.
+
+### Upload de Arquivo
+
+Salva no servidor um arquivo enviado pelo cliente.
+
+Upload de texto:
+
+```json
+{
+  "command": "upload_file",
+  "username": "ana",
+  "path": "Documentos/nota.txt",
+  "content": "Conteúdo do arquivo"
+}
+```
+
+Upload binário usando Base64:
+
+```json
+{
+  "command": "upload_file",
+  "username": "ana",
+  "path": "imagem.png",
+  "content": "BASE64_DO_ARQUIVO",
+  "encoding": "base64"
+}
+```
+
+Também é possível informar pasta e nome separadamente:
+
+```json
+{
+  "command": "upload_file",
+  "username": "ana",
+  "path": "Documentos",
+  "file_name": "nota.txt",
+  "content": "Texto"
+}
+```
+
+Também são aceitos `fileName` ou `name` no lugar de `file_name`.
+
+Por padrão, o servidor não sobrescreve arquivos existentes. Para permitir sobrescrita:
+
+```json
+{
+  "command": "upload_file",
+  "username": "ana",
+  "path": "Documentos/nota.txt",
+  "content": "Novo conteúdo",
+  "overwrite": true
+}
+```
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "message": "Arquivo enviado com sucesso.",
+  "size": 13
+}
+```
+
+### Download de Arquivo
+
+Retorna um arquivo do servidor codificado em Base64.
+
+```json
+{
+  "command": "download_file",
+  "username": "ana",
+  "path": "Documentos/nota.txt"
+}
+```
+
+Resposta:
+
+```json
+{
+  "status": "success",
+  "file_name": "nota.txt",
+  "size": 13,
+  "encoding": "base64",
+  "data": "Q29udGV1ZG8="
+}
+```
+
+O cliente deve decodificar `data` de Base64 e salvar os bytes no disco da VM cliente.
+
+## Segurança de Caminhos
+
+Todas as operações de arquivo usam caminhos relativos à pasta do usuário.
+
+O servidor bloqueia tentativas de acessar arquivos fora dessa pasta, como:
+
+```json
+{
+  "command": "read_file",
+  "username": "ana",
+  "path": "../users.json"
+}
+```
+
+Resposta esperada:
+
+```json
+{
+  "status": "error",
+  "message": "Caminho inválido."
+}
+```
+
+Essa validação impede que o cliente acesse arquivos internos do servidor ou arquivos de outros usuários.
+
