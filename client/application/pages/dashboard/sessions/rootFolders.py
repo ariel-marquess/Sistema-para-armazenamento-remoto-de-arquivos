@@ -8,6 +8,10 @@ class RootFolders(ctk.CTkFrame):
         super().__init__(master)
         self.objPath = objPath
 
+        # Estilos do texto
+        self.textFont = util.font(13)
+        self.textColor = "white"
+
         # Declarando variáveis que serão utilizadas posteriormente
         self.containers_rootFolder = []
 
@@ -28,7 +32,7 @@ class RootFolders(ctk.CTkFrame):
                     command=lambda: self.toGoBack())
         self.button_toGoBack.grid(row=0, column=0, padx=5, sticky="w")
 
-        self.label_rootFolder = ctk.CTkLabel(self.container_header, text="Arquivos", font=("Roboto", 14, "bold"))
+        self.label_rootFolder = ctk.CTkLabel(self.container_header, text="Arquivos", font=("Roboto", 15, "bold"), text_color=self.textColor)
         self.label_rootFolder.grid(row=0, column=1)
 
         self.row_rootFolder = 1
@@ -38,7 +42,7 @@ class RootFolders(ctk.CTkFrame):
                 self.row_rootFolder += 1
 
         # Adicionando botão de "fazer upload"
-        self.button_upload = ctk.CTkButton(self, text="Fazer upload", fg_color="#2b2f76")
+        self.button_upload = ctk.CTkButton(self, text="Fazer upload", fg_color="#2b2f76", text_color=self.textColor, command=self.perform_upload)
         self.button_upload.grid(row=self.row_rootFolder, column=0, pady=20, sticky="s")
         self.rowconfigure(self.row_rootFolder, weight=1)
 
@@ -51,7 +55,7 @@ class RootFolders(ctk.CTkFrame):
         label_image = ctk.CTkLabel(container, image=util.images("folder", 30), text="")
         label_image.grid(row=0, column=0, padx=5)
 
-        label_text = ctk.CTkLabel(container, text=folder_name)
+        label_text = ctk.CTkLabel(container, text=folder_name, font=self.textFont, text_color=self.textColor)
         label_text.grid(row=0, column=1, sticky="w")
 
         array = [container, label_image, label_text]
@@ -75,7 +79,6 @@ class RootFolders(ctk.CTkFrame):
             name = target.winfo_children()[1].cget('text')
 
             self.objPath.joinRoot(name)
-            self.objPath.addLastPath(self.objPath.getPath())
             ctrl.openFolder(self.master, self, self.objPath.getPath())
         except Exception as e:
             util.MessageBox(
@@ -85,12 +88,23 @@ class RootFolders(ctk.CTkFrame):
             )
 
 
+    def perform_upload(self):
+        if self.objPath.splitext():
+            # Abrir página ou menu de upload
+            pass
+        else:
+            util.MessageBox(
+                title="O diretório atual não é uma pasta",
+                message="Não foi possível realizar upload porque o diretório atual é um arquivo. Caso ainda queira realizar o upload, selecione uma pasta.",
+                icon="info"
+            )
+
+
     def toGoBack(self):
         try:
-            path = None  # Tenho que faxer um mevanismo para voltar para a pasta anterior
-
             descriptionFolder = self.master.winfo_childrens()[1]  # Retorna a segunda sessão da página Dashboard
-            ctrl.openFolder(self.master, descriptionFolder, path)
+            self.objPath.back()
+            ctrl.openFolder(self.master, descriptionFolder, self.objPath.getPath())
         except Exception as e:
             util.MessageBox(
                 title="Não foi possível retornar à pasta anterior",

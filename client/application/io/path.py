@@ -1,12 +1,11 @@
 import os
 
+import client.application.utils.ul as util
+
 class Path:
     def __init__(self, path):
         setPath(path)
         setRootPath(path)
-
-        self.lastPath = []
-        self.lastPath.append(path)
 
     def getPath(self):
         return self.currentPath
@@ -28,8 +27,17 @@ class Path:
         for arg in args:
             setPath(os.path.join(getRootPath(), arg))
 
-    def addLastPath(self, path):
-        if len(self.lastPath) >= 5:
-            self.lastPath.pop(0)
+    def splitext(self):
+        base, ext = os.path.splitext(getPath())
+        return False if ext == "" else True
 
-        self.lastPath.append(path)
+    def back(self):
+        if getPath() != getRootPath():
+            currentPath, lastDiretory = os.path.split(getPath())
+            setPath(currentPath)
+        else:
+            util.MessageBox(
+                title="Você está na pasta raiz",
+                message="ERRO: você está no diretório inicial do seu repositório, a partir daqui não há mais como voltar.",
+                icon="warning"
+            )

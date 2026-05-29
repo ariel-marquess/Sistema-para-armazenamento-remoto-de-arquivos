@@ -1,29 +1,33 @@
 import customtkinter as ctk
 
 import client.application.controls.ctrl as ctrl
+import client.application.utils.ul as util
 import client.application.pages.dashboard.menus.common.cmn as common
 
 class CreateFolder(ctk.CTkFrame):
     def __init__(self, master, currentSession, currentPath):
         super().__init__(master)
 
+        # Estilos do texto
+        self.textColor = "white"
+
         self.configure(fg_color="#393939", corner_radius=10, border_width=1, width=400)
         self.columnconfigure(0, minsize=400)
 
-        self.title = ctk.CTkLabel(self, text="Nova pasta", fg_color="transparent")
+        self.title = ctk.CTkLabel(self, text="Nova pasta", fg_color="transparent", font=util.font(15), text_color=self.textColor)
         self.title.grid(row=0, column=0, pady=5, sticky="ew")
 
         self.entry = ctk.CTkEntry(self, placeholder_text="Digite o nome da pasta...")
         self.entry.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
         self.entry.bind("<Return>", lambda e, cs, cp: self.actionClick(cs, cp))
 
-        self.container_buttons = ctk.CTkFrame(self, fg_color="transparent")
+        self.container_buttons = ctk.CTkFrame(self, fg_color="transparent", text_color=self.textColor)
         self.container_buttons.grid(row=2, column=0, pady=5)
 
-        self.canceler = ctk.CTkButton(self.container_buttons, text="Cancelar", fg_color="#2b2f76", width=0, height=0, command=lambda: self.destroy())
+        self.canceler = ctk.CTkButton(self.container_buttons, text="Cancelar", fg_color="#2b2f76", width=0, height=0, text_color=self.textColor, command=lambda: self.destroy())
         self.canceler.grid(row=0, column=0, padx=5)
 
-        self.create = ctk.CTkButton(self.container_buttons, text="Criar pasta", fg_color="#2b2f76", width=0, height=0,
+        self.create = ctk.CTkButton(self.container_buttons, text="Criar pasta", fg_color="#2b2f76", width=0, height=0, text_color=self.textColor,
                     command=lambda cs=currentSession, p=currentPath: self.actionClick(cs, p))
         self.create.grid(row=0, column=1, padx=5)
 

@@ -9,6 +9,10 @@ class menuFile(ctk.CTkFrame):
         super().__init__(master)
         self.objPath = objPath
 
+        # Estilos do texto
+        self.textFont = util.font(14)
+        self.textColor = "white"
+
         target = forced_widget if forced_widget else event.widget
         if isinstance(target, ctk.CTkLabel):
             target = target.master
@@ -18,10 +22,6 @@ class menuFile(ctk.CTkFrame):
         sort = childrens[2].cget('text')
 
         if sort == "arquivo":
-            # Declarando métodos que serão utilizados posteriormente
-            self.download = ctrl.download
-            self.delete = ctrl.delete
-
             # Apontando o caminho do arquivo clicado
             self.objPath.join(name)
             pathCliked = self.objPath.getPath()
@@ -30,15 +30,15 @@ class menuFile(ctk.CTkFrame):
             self.columnconfigure(0, weight=1)
             self.rowconfigure(2, minsize=10)
 
-            download = ctk.CTkButton(self, text="Baixar", anchor="w", fg_color="transparent",
+            download = ctk.CTkButton(self, text="Baixar", anchor="w", fg_color="transparent", font=self.textFont, text_color=self.textColor,
                         command=lambda s=self, download=ctrl.download, p=pathCliked: util.execute(s, download, [p]))  # Tenho que estabelecer qual será o diretório do arquivo
             download.grid(row=0, column=0, padx=10, pady=(5, 0), sticky="w")
 
-            delete = ctk.CTkButton(self, text="Apagar", anchor="w", fg_color="transparent",
+            delete = ctk.CTkButton(self, text="Apagar", anchor="w", fg_color="transparent", font=self.textFont, text_color=self.textColor,
                         command=lambda s=self, delete=ctrl.delete, t=target, p=pathCliked: util.execute(s, delete, [t, p]))
             delete.grid(row=1, column=0, padx=10, sticky="w")
 
-            canceler = ctk.CTkButton(self, text="Cancelar", anchor="w", fg_color="transparent", command=lambda: self.destroy())
+            canceler = ctk.CTkButton(self, text="Cancelar", anchor="w", fg_color="transparent", font=self.textFont, text_color=self.textColor, command=lambda: self.destroy())
             canceler.grid(row=3, column=0, padx=10, pady=5, sticky="w")
 
             common.center_menu(self.master, self, event)

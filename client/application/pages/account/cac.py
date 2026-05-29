@@ -21,8 +21,12 @@ class Create(ctk.CTkFrame):
         self.grid_rowconfigure(9, weight=1)
         self.grid_rowconfigure(10, weight=1)
 
+        # Estilos do texto
+        self.textFont = util.font(14)
+        self.textColor = "white"
+
         # Adicionando o título da página
-        self.label_title = ctk.CTkLabel(self, text="Criando uma nova conta", font=("Roboto", 24, "bold"))
+        self.label_title = ctk.CTkLabel(self, text="Criando uma nova conta", font=util.font(24), text_color=self.textColor)
         self.label_title.grid(row=0, column=0, pady=30, columnspan=3)
 
         # Optamos por colocar os componentes label e entry da parte de "nome completo" e "nome de usuário" em um container próprio.
@@ -33,13 +37,13 @@ class Create(ctk.CTkFrame):
         self.container_info.grid_columnconfigure(1, weight=1)
         self.container_info.grid_columnconfigure(2, weight=1)
 
-        self.label_fullName = ctk.CTkLabel(self.container_info, text="Nome completo")
+        self.label_fullName = ctk.CTkLabel(self.container_info, text="Nome completo", font=self.textFont, text_color=self.textColor)
         self.label_fullName.grid(row=0, column=0, pady=5, padx=10, sticky="w")
 
         self.entry_fullName = ctk.CTkEntry(self.container_info)
         self.entry_fullName.grid(row=1, column=0, padx=10, columnspan=2, sticky="ew")
 
-        self.label_userName = ctk.CTkLabel(self.container_info, text="Nome de usuário")
+        self.label_userName = ctk.CTkLabel(self.container_info, text="Nome de usuário", font=self.textFont, text_color=self.textColor)
         self.label_userName.grid(row=0, column=2, pady=5, padx=10, sticky="w")
 
         self.entry_userName = ctk.CTkEntry(self.container_info)
@@ -55,39 +59,45 @@ class Create(ctk.CTkFrame):
         self.container_address.grid_columnconfigure(2, weight=1)
         self.container_address.grid_columnconfigure(3, weight=1)
 
-        self.label_IP = ctk.CTkLabel(self.container_address, text="Endereço IP da máquina")
+        self.label_IP = ctk.CTkLabel(self.container_address, text="Endereço IP da máquina", font=self.textFont, text_color=self.textColor)
         self.label_IP.grid(row=0, column=0, sticky="w")
 
         self.entry_IP = ctk.CTkEntry(self.container_address)
         self.entry_IP.grid(row=1, column=0, sticky="ew")
 
-        self.label_port = ctk.CTkLabel(self.container_address, text="Porta")
+        self.label_port = ctk.CTkLabel(self.container_address, text="Porta", font=self.textFont, text_color=self.textColor)
         self.label_port.grid(row=0, column=1, padx=10, sticky="w")
 
         self.entry_port = ctk.CTkEntry(self.container_address)
         self.entry_port.grid(row=1, column=1, padx=10, sticky="ew")
 
         # Parte para definição da senha
-        self.label_password = ctk.CTkLabel(self, text="Senha")
+        self.label_password = ctk.CTkLabel(self, text="Senha", font=self.textFont, text_color=self.textColor)
         self.label_password.grid(row=4, column=0, padx=20, sticky="w")
 
         self.entry_password = ctk.CTkEntry(self, show="*")
         self.entry_password.grid(row=5, column=0, padx=20, sticky="ew")
 
-        self.label_confirmPassword = ctk.CTkLabel(self, text="Confirmar senha")
-        self.label_confirmPassword.grid(row=6, column=0, padx=20, sticky="w")
+        self.label_confirmPassword = ctk.CTkLabel(self, text="Confirmar senha", font=self.textFont, text_color=self.textColor)
+        self.label_confirmPassword.grid(row=6, column=0, padx=20, pady=(10,0), sticky="w")
 
         self.entry_confirmPassword = ctk.CTkEntry(self, show="*")
         self.entry_confirmPassword.grid(row=7, column=0, padx=20, sticky="ew")
 
-        self.checkBox_seePassword = ctk.CTkCheckBox(self, text="Mostrar senha", command=self.reveal_password)
+        self.checkBox_seePassword = ctk.CTkCheckBox(self, text="Mostrar senha", command=self.reveal_password, text_color=self.textColor)
         self.checkBox_seePassword.grid(row=8, column=0, padx=20, pady=10)
 
         self.open_login = open_login   # Método que abrirá a página de login
 
-        # Botão para submissão das informações
-        self.button_createAccount = ctk.CTkButton(self, fg_color="#2b2f76", text="Criar conta", command=self.create)
-        self.button_createAccount.grid(row=11, column=2, padx=20, pady=20, sticky="e")
+        # Botões de "voltar" e "criar conta"
+        self.container_buttons = ctk.CTkFrame(self, fg_color="transparent")
+        self.container_buttons.grid(row=11, column=1, columnspan=2, padx=20, pady=20, sticky="e")
+
+        self.button_back = ctk.CTkButton(self.container_buttons, fg_color="#2b2f76", text="Voltar", command=self.login, text_color=self.textColor)
+        self.button_back.grid(row=0, column=0, padx=5)
+
+        self.button_createAccount = ctk.CTkButton(self.container_buttons, fg_color="#2b2f76", text="Criar conta", command=self.create, text_color=self.textColor)
+        self.button_createAccount.grid(row=0, column=1)
 
 
     def reveal_password(self):

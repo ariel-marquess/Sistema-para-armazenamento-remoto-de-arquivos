@@ -75,15 +75,13 @@ def createFolder(path, name, master, currentSession):
         )
 
 
-def openFolder(master, currentSession, objPath = None):
+def openFolder(master, objPath, currentSession=None):
     try:
-        if path:
-            print(f'Abrindo pasta: {objPath}')
-        else:
-            content_descriptionPath = openData.openFolder(objPath.getPath())
-
+        if currentSession:
             currentSession.destroy()
-            dfolder.session_descriptionFolder(master, content_descriptionPath, objPath)
+
+        content_descriptionPath = openData.openFolder(objPath.getPath())
+        dfolder.session_descriptionFolder(master, content_descriptionPath, objPath)
     except Exception as e:
         util.MessageBox(
             title="Problema na abertura da pasta",
@@ -92,15 +90,13 @@ def openFolder(master, currentSession, objPath = None):
         )
 
 
-def openFile(master, currentSession, objPath = None):
+def openFile(master, objPath, currentSession=None):
     try:
-        if path:
-            print(f'Abrindo arquivo: {objPath}')
-        else:
-            content_file = openData.openFile(objPath.getPath())
-
+        if currentSession:
             currentSession.destroy()
-            dfile.session_contentFile(master, content_file, objPath.getPath())
+
+        content_file = openData.openFile(objPath.getPath())
+        dfile.session_contentFile(master, content_file, objPath.getPath())
     except Exception as e:
         util.MessageBox(
             title="Problema na abertura do arquivo",
