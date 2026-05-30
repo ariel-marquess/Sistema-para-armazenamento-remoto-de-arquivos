@@ -30,6 +30,10 @@ def execute(master, function, args=None):
         master.destroy()
 
 
+def font(size):
+    return ctk.CTkFont(family="Roboto", size=size, weight="bold")
+
+
 def images(command, size=20):    # Método que retorna uma imagem quando chamado
     try:
         currentFile = os.path.dirname(os.path.abspath(__file__))

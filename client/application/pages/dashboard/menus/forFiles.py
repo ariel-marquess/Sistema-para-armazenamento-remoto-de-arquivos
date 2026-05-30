@@ -11,6 +11,10 @@ class menuFile(ctk.CTkFrame):
         self.objPath = objPath
         self.master = master # master -> descriptionFolders
 
+        # Estilos do texto
+        self.textFont = util.font(14)
+        self.textColor = "white"
+
         target = forced_widget if forced_widget else event.widget
         if isinstance(target, ctk.CTkLabel):
             target = target.master
@@ -40,7 +44,7 @@ class menuFile(ctk.CTkFrame):
                                           command=lambda: self.execute_and_destroy(ctrl.delete, [username, pathClicked], target))
             delete_button.grid(row=1, column=0, padx=10, sticky="w")
 
-            canceler = ctk.CTkButton(self, text="Cancelar", anchor="w", fg_color="transparent", command=lambda: self.destroy())
+            canceler = ctk.CTkButton(self, text="Cancelar", anchor="w", fg_color="transparent", font=self.textFont, text_color=self.textColor, command=lambda: self.destroy())
             canceler.grid(row=3, column=0, padx=10, pady=5, sticky="w")
 
             common.center_menu(self.master, self, event)

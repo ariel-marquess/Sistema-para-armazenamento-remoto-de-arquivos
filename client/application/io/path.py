@@ -1,5 +1,7 @@
 import os
 
+import client.application.utils.ul as util
+
 class Path:
     def __init__(self, root_path=""):
         # O caminho raiz nunca muda (ex: o nome de usuário)

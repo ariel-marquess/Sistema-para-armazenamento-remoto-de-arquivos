@@ -15,6 +15,10 @@ class Folders(ctk.CTkScrollableFrame):
         self.menu = None
         self.containers_description = []
 
+        # Estilos do texto
+        self.textFont = util.font(13)
+        self.textColor = "white"
+
         # Métodos que serão utilizados posteriormente
         self.menuFile = mfile.menuFile
         self.menuFolder = mfolder.menuFolder
@@ -33,9 +37,17 @@ class Folders(ctk.CTkScrollableFrame):
         self.container_descriptionContent.columnconfigure(1, minsize=100, uniform="tam")
         self.container_descriptionContent.columnconfigure(2, minsize=100, uniform="tam")
 
-        ctk.CTkLabel(self.container_descriptionContent, text="Nome").grid(row=0, column=0, padx=10, sticky="w")
-        ctk.CTkLabel(self.container_descriptionContent, text="Tamanho").grid(row=0, column=1)
-        ctk.CTkLabel(self.container_descriptionContent, text="Tipo").grid(row=0, column=2)
+        self.label_contentName = ctk.CTkLabel(self.container_descriptionContent, text="Nome", font=self.textFont, text_color=self.textColor)
+        self.label_contentName.grid(row=0, column=0, padx=10, sticky="w")
+
+        self.label_contentSize = ctk.CTkLabel(self.container_descriptionContent, text="Tamanho", font=self.textFont, text_color=self.textColor)
+        self.label_contentSize.grid(row=0, column=1)
+
+        self.label_contentType = ctk.CTkLabel(self.container_descriptionContent, text="Tipo", font=self.textFont, text_color=self.textColor)
+        self.label_contentType.grid(row=0, column=2)
+
+        for i in range(len(content["name"])):
+            self.descriptionFolder(content["name"][i], content["size"][i], content["type"][i], i + 1)
 
         # Renderiza os itens da pasta
         if content and content.get("name"):
@@ -49,13 +61,13 @@ class Folders(ctk.CTkScrollableFrame):
         container.columnconfigure(1, minsize=100, uniform="tam")
         container.columnconfigure(2, minsize=100, uniform="tam")
 
-        contentName = ctk.CTkLabel(container, text=file_name)
+        contentName = ctk.CTkLabel(container, text=file_name, font=self.textFont, text_color=self.textColor)
         contentName.grid(row=0, column=0, padx=10, sticky="w")
 
-        contentSize = ctk.CTkLabel(container, text=size)
+        contentSize = ctk.CTkLabel(container, text=size, font=self.textFont, text_color=self.textColor)
         contentSize.grid(row=0, column=1)
 
-        contentType = ctk.CTkLabel(container, text=sort)
+        contentType = ctk.CTkLabel(container, text=sort, font=self.textFont, text_color=self.textColor)
         contentType.grid(row=0, column=2)
 
         # --- CORREÇÃO APLICADA AQUI ---
