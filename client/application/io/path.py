@@ -1,35 +1,31 @@
 import os
 
 class Path:
-    def __init__(self, path):
-        setPath(path)
-        setRootPath(path)
+    def __init__(self, root_path=""):
+        # O caminho raiz nunca muda (ex: o nome de usuário)
+        self.root_path = root_path
+        # O histórico de caminhos visitados, começando pela raiz
+        self.history = [root_path]
 
-        self.lastPath = []
-        self.lastPath.append(path)
+    def get_current_path(self):
+        """Retorna o caminho atual (o último item do histórico)."""
+        return self.history[-1]
 
-    def getPath(self):
-        return self.currentPath
+    def join(self, folder_name):
+        """Avança para uma subpasta e adiciona ao histórico."""
+        current = self.get_current_path()
+        new_path = os.path.join(current, folder_name)
+        self.history.append(new_path)
+        return new_path
 
-    def setPath(self, path):
-        self.currentPath = path
+    def go_back(self):
+        """Retrocede para o caminho anterior no histórico."""
+        if len(self.history) > 1: # Só pode voltar se não estiver na raiz
+            self.history.pop()
+            return True
+        return False
 
-    def getRootPath(self):
-        return self.rootPath
-
-    def setRootPath(self, path):
-        self.rootPath = path
-
-    def join(self, args: str):
-        for arg in args:
-            setPath(os.path.join(getPath(), arg))
-
-    def joinRoot(self, args: str):
-        for arg in args:
-            setPath(os.path.join(getRootPath(), arg))
-
-    def addLastPath(self, path):
-        if len(self.lastPath) >= 5:
-            self.lastPath.pop(0)
-
-        self.lastPath.append(path)
+    def go_to_root_and_join(self, folder_name):
+        """Reseta a navegação para a raiz e entra em uma subpasta."""
+        self.history = [self.root_path] # Reseta o histórico para a raiz
+        return self.join(folder_name)

@@ -1,40 +1,28 @@
-import socket
-import json
+from client.protocols.connection import server_connection
 
 def isUser(username, password):
-    # Este método verifica se o usuário e a senha correspondem aos registros do servidor.
+    """
+    Usa a conexão central para verificar se o usuário e a senha correspondem.
+    Retorna True em caso de sucesso, False caso contrário.
+    """
+    payload = {"username": username, "password": password}
+    response = server_connection.send_request("login", payload)
     
-    # IP e Porta da rede interna da VM, para que as VMs possam se comunicar.
-    address = '192.168.0.2'
-    port = 65432
-
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.connect((address, port))
-
-            # Prepara os dados para o pedido de login
-            data_to_send = {
-                "command": "login",
-                "username": username,
-                "password": password
-            }
-            s.sendall(json.dumps(data_to_send).encode('utf-8'))
-
-            # Recebe a resposta
-            response = s.recv(1024).decode('utf-8')
-            response_data = json.loads(response)
-
-            if response_data.get("status") == "success":
-                return True
-            else:
-                return False
-
-    except Exception as e:
-        print(f"Erro de conexão ao tentar fazer login: {e}")
+    if response.get("status") == "success":
+        return True
+    else:
+        # O erro já é impresso pela classe de conexão, mas podemos adicionar mais contexto se necessário.
+        print(f"Falha no login para o usuário '{username}': {response.get('message')}")
         return False
 
 def isUsername(username):
-    # Este método deve verificar se o nome de usuário já está ou não sendo utilizado.
-    # Por enquanto, esta função não está conectada ao servidor.
-    # A verificação real é feita no lado do servidor durante a criação da conta.
+    """
+    Verifica no lado do servidor se um nome de usuário já existe.
+    (Esta função pode ser implementada no futuro se for necessário
+    verificar o nome de usuário em tempo real, antes de submeter o formulário).
+    """
+    # Exemplo de como poderia ser implementado:
+    # payload = {"username": username}
+    # response = server_connection.send_request("check_username", payload)
+    # return response.get("exists", True) # Retorna True por segurança se a resposta falhar
     return False

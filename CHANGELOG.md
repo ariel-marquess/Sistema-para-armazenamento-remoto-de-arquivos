@@ -62,6 +62,16 @@ Este documento resume as principais alterações que fiz no código para impleme
 *   **O que eu modifiquei:** Criei e atualizei estes arquivos.
 *   **Por que eu modifiquei:** Para documentar todo o processo de configuração do ambiente, os problemas que enfrentei e as soluções, além de registrar as mudanças feitas no código. Isso vai ajudar o resto da equipe a se atualizar e a configurar seus próprios ambientes sem passar pelas mesmas dificuldades.
 
+### 8. Finalização das Funcionalidades do Cliente
+
+*   **O que eu modifiquei:**
+    1.  **Refatoração:** Centralizei a lógica de socket na nova classe `ServerConnection` em `client/protocols/connection.py`.
+    2.  **Implementação de Protocolos:** Implementei as funções de `uploadFile`, `downloadFile`, `deleteFile` em `file_handler.py` e `mkdir` em `mkdir.py`.
+    3.  **Navegação de Pastas:** Corrigi e implementei a classe `Path` para gerenciar o histórico de navegação, permitindo entrar e sair de pastas.
+    4.  **Integração da UI:** Conectei todos os botões e menus restantes do Dashboard (Upload, Download, Apagar, Criar Pasta, Voltar, Visualizar Arquivo) às suas respectivas funções de controle.
+
+*   **Por que eu modifiquei:** Para finalizar todas as funcionalidades visíveis na interface, tornando o protótipo completamente funcional de ponta a ponta, e para melhorar a qualidade do código do cliente, eliminando repetição.
+
 ---
 
 # Diário de Alterações no Código - Backend (Ricardo)
