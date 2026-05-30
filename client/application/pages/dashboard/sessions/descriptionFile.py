@@ -5,6 +5,7 @@ import client.application.utils.ul as util
 
 class File(ctk.CTkFrame):
     def __init__(self, master, content, currentPath):
+        # O 'master' que esta classe recebe já é a instância do Dashboard
         super().__init__(master)
 
         # Estilos do texto
@@ -23,7 +24,3 @@ class File(ctk.CTkFrame):
 
         self.button_downloadFile = ctk.CTkButton(self, text="Baixar arquivo", fg_color="#2b2f76", text_color=self.textColor, command=lambda p=currentPath: ctrl.download(p))
         self.button_downloadFile.grid(row=1, column=0, padx=20, pady=20, sticky="e")
-
-
-    def destroy(self):
-        self.destroy()

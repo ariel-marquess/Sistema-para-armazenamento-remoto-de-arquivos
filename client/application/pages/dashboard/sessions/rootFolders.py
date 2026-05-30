@@ -7,6 +7,7 @@ class RootFolders(ctk.CTkFrame):
     def __init__(self, master, content, objPath):
         super().__init__(master)
         self.objPath = objPath
+        self.master = master # Armazena a referência ao Dashboard
 
         # Estilos do texto
         self.textFont = util.font(13)
@@ -36,10 +37,11 @@ class RootFolders(ctk.CTkFrame):
         self.label_rootFolder.grid(row=0, column=1)
 
         self.row_rootFolder = 1
-        for i in range(len(content["name"])):
-            if content["type"][i] == "pasta":
-                self.rootFolder(content['name'][i])
-                self.row_rootFolder += 1
+        if content and content.get("name"):
+            for i in range(len(content["name"])):
+                if content["type"][i] == "pasta":
+                    self.rootFolder(content['name'][i])
+                    self.row_rootFolder += 1
 
         # Adicionando botão de "fazer upload"
         self.button_upload = ctk.CTkButton(self, text="Fazer upload", fg_color="#2b2f76", text_color=self.textColor, command=self.perform_upload)
@@ -68,6 +70,12 @@ class RootFolders(ctk.CTkFrame):
 
         self.containers_rootFolder.append(container)
 
+    def upload_action(self):
+        username = self.master.get_username()
+        current_path = self.objPath.get_current_path()
+        if ctrl.upload(username, current_path):
+            # A lógica de atualização precisa ser revista
+            pass
 
     def actionClick(self, event, forced_widget=None):
         try:
@@ -77,9 +85,12 @@ class RootFolders(ctk.CTkFrame):
                 target = target.master
 
             name = target.winfo_children()[1].cget('text')
-
-            self.objPath.joinRoot(name)
-            ctrl.openFolder(self.master, self, self.objPath.getPath())
+            
+            # Usa o novo método para navegar a partir da raiz
+            self.objPath.go_to_root_and_join(name)
+            
+            # Pede ao Dashboard para atualizar a tela
+            self.master.navigate_to_current_path()
         except Exception as e:
             util.MessageBox(
                 title="Não foi possível abrir a pasta",
@@ -102,9 +113,11 @@ class RootFolders(ctk.CTkFrame):
 
     def toGoBack(self):
         try:
-            descriptionFolder = self.master.winfo_childrens()[1]  # Retorna a segunda sessão da página Dashboard
-            self.objPath.back()
-            ctrl.openFolder(self.master, descriptionFolder, self.objPath.getPath())
+            # A lógica correta para voltar
+            if self.objPath.go_back():
+                self.master.navigate_to_current_path()
+            else:
+                print("Já está na pasta raiz.")
         except Exception as e:
             util.MessageBox(
                 title="Não foi possível retornar à pasta anterior",

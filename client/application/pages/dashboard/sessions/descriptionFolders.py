@@ -1,4 +1,5 @@
 import customtkinter as ctk
+import os
 
 import client.application.utils.ul as util
 import client.application.pages.dashboard.menus.forFiles as mfile
@@ -8,6 +9,7 @@ import client.application.controls.ctrl as ctrl
 class Folders(ctk.CTkScrollableFrame):
     def __init__(self, master, content, objPath):
         super().__init__(master)
+        self.master = master # Dashboard
         self.objPath = objPath
 
         self.menu = None
@@ -22,13 +24,13 @@ class Folders(ctk.CTkScrollableFrame):
         self.menuFolder = mfolder.menuFolder
         self.change_background = util.change_background
 
-        # Configurando características do container principal
+        # Configurando o frame
         self.configure(fg_color="#252525")
         self.grid(row=0, column=1, columnspan=3, sticky="nsew")
         self.columnconfigure(0, weight=1)
         self.bind_background_menu()
 
-        # Criando container que abrigará a descrição do conteúdo de cada pasta
+        # Cabeçalho da lista de arquivos
         self.container_descriptionContent = ctk.CTkFrame(self, fg_color="#4e4e4e")
         self.container_descriptionContent.grid(row=0, column=0, pady=5, padx=5, sticky="ew")
         self.container_descriptionContent.columnconfigure(0, weight=1)
@@ -47,6 +49,10 @@ class Folders(ctk.CTkScrollableFrame):
         for i in range(len(content["name"])):
             self.descriptionFolder(content["name"][i], content["size"][i], content["type"][i], i + 1)
 
+        # Renderiza os itens da pasta
+        if content and content.get("name"):
+            for i in range(len(content["name"])):
+                self.descriptionFolder(content["name"][i], content["size"][i], content["type"][i], i + 1)
 
     def descriptionFolder(self, file_name, size, sort, row):  # 'Sort' é o equivalente a 'type' (tipo)
         container = ctk.CTkFrame(self, fg_color="transparent")
@@ -64,12 +70,17 @@ class Folders(ctk.CTkScrollableFrame):
         contentType = ctk.CTkLabel(container, text=sort, font=self.textFont, text_color=self.textColor)
         contentType.grid(row=0, column=2)
 
-        array = [container, contentName, contentSize, contentType]
-        for component in array:
-            component.bind("<Button-1>", lambda e, c=container: self.actionClick(e, c))
-            component.bind("<Button-3>", lambda e, c=container: self.open_menuFile(e, c))
+        # --- CORREÇÃO APLICADA AQUI ---
+        # Associa os eventos de clique a todos os componentes para garantir a captura
+        # O 'forced_widget=container' garante que a função sempre receba o container principal
+        for component in container.winfo_children():
+            component.bind("<Button-1>", lambda e, c=container: self.actionClick(e, forced_widget=c))
+            component.bind("<Button-3>", lambda e, c=container: self.open_menuFile(e, forced_widget=c))
             component.bind("<Enter>", lambda e, c=container: self.change_background(e, c, "#313131"))
             component.bind("<Leave>", lambda e, c=container: self.change_background(e, c, "transparent"))
+        
+        # O bind no container pai também é uma boa prática como fallback
+        container.bind("<Button-3>", lambda e, c=container: self.open_menuFile(e, forced_widget=c))
 
         self.containers_description.append(container)
 

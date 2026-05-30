@@ -4,21 +4,6 @@ Este projeto implementa um sistema de armazenamento remoto, semelhante a um Driv
 
 O objetivo principal é aplicar conceitos de comunicação em rede, transferência confiável de dados, autenticação básica, gerenciamento de diretórios e persistência de arquivos em disco.
 
-## Contexto da Atividade
-
-A atividade propõe o desenvolvimento de um sistema de Drive usando sockets TCP, com cliente e servidor executando em máquinas virtuais diferentes, preferencialmente usando Debian no VirtualBox.
-
-O projeto explora:
-
-- programação de aplicações em rede;
-- modelo cliente-servidor;
-- gerenciamento de conexões TCP;
-- criação de um protocolo simples de aplicação;
-- autenticação básica;
-- listagem de arquivos;
-- upload e download;
-- persistência dos dados no disco da VM do servidor.
-
 ## Tecnologias Utilizadas
 
 - Python 3
@@ -26,10 +11,30 @@ O projeto explora:
 - JSON para troca de mensagens entre cliente e servidor
 - Base64 para transporte de arquivos binários
 - `customtkinter` para a interface gráfica do cliente
-- `Pillow` para carregar imagens da interface
-- `CTkMessagebox` para mensagens gráficas
-- VirtualBox para executar cliente e servidor em VMs diferentes
-- Debian/Linux como ambiente recomendado
+
+## Funcionalidades Implementadas
+
+- **Autenticação de Usuário:** Sistema completo de criação de conta e login.
+- **Armazenamento Dedicado:** Cada usuário possui uma pasta dedicada e isolada no servidor.
+- **Listagem de Arquivos e Pastas:** O cliente exibe o conteúdo do diretório atual do usuário.
+- **Navegação de Pastas:** O usuário pode entrar em subpastas e retornar ao diretório anterior.
+- **Upload de Arquivos:** O cliente pode enviar arquivos para o servidor.
+- **Download de Arquivos:** O cliente pode baixar arquivos do servidor para sua máquina local.
+- **Criação de Pastas:** O cliente pode criar novas pastas no seu espaço de armazenamento.
+- **Exclusão de Arquivos:** O cliente pode apagar arquivos permanentemente do servidor.
+- **Visualização de Arquivos de Texto:** O cliente pode abrir e visualizar o conteúdo de arquivos de texto.
+
+## Execução do Projeto
+
+### Servidor
+1. Navegue até a pasta `server/`.
+2. Execute o servidor: `python3 server.py`.
+3. O servidor escutará na porta `65432`.
+
+### Cliente
+1. Navegue até a **raiz do projeto**.
+2. Execute o cliente como um módulo: `python3 -m client.application.pages.main`.
+3. A interface gráfica será iniciada.
 
 ## Estrutura do Projeto
 
@@ -37,391 +42,109 @@ O projeto explora:
 .
 ├── client/
 │   ├── application/
-│   │   ├── controls/
-│   │   │   └── ctrl.py
-│   │   ├── pages/
-│   │   │   ├── account/
-│   │   │   ├── dashboard/
-│   │   │   ├── login/
-│   │   │   └── main.py
-│   │   └── util/
-│   │       └── ul.py
-│   ├── images/
 │   └── protocols/
-│       ├── check_user.py
-│       ├── record_data.py
-│       ├── open_data.py
-│       ├── file_handler.py
-│       └── creators/
-│           └── mkdir.py
 ├── server/
 │   ├── server.py
-│   ├── data/
+│   ├── user_manager.py
+│   ├── file_manager.py
 │   └── storage/
-├── shell/
-├── README-HEITOR.md
 └── README.md
 ```
 
-## Visão Geral
-
-O sistema é dividido em duas partes:
-
-- **Servidor:** recebe conexões TCP, processa comandos em JSON, gerencia usuários e manipula arquivos no disco.
-- **Cliente:** fornece uma interface gráfica para login, criação de conta e navegação pelos arquivos.
-
-O servidor escuta na porta `65432` e usa o host `0.0.0.0`, permitindo conexões vindas de outras máquinas da rede.
-
-## Servidor
-
-O arquivo principal do servidor é:
-
-```text
-server/server.py
-```
-
-Ele é responsável por:
-
-- abrir o socket TCP;
-- aceitar conexões de clientes;
-- receber mensagens JSON;
-- identificar o comando solicitado;
-- executar operações de autenticação e armazenamento;
-- responder ao cliente em JSON.
-
-Os dados persistentes ficam em:
-
-```text
-server/storage/
-```
-
-O arquivo de usuários fica em:
-
-```text
-server/storage/users.json
-```
-
-Cada usuário possui uma pasta própria:
-
-```text
-server/storage/
-├── users.json
-├── ana/
-│   ├── nota.txt
-│   └── Documentos/
-└── joao/
-    └── imagem.png
-```
-
-## Cliente
-
-O arquivo principal do cliente gráfico é:
-
-```text
-client/application/pages/main.py
-```
-
-Ele cria a janela principal e alterna entre:
-
-- tela de login;
-- tela de criação de conta;
-- dashboard de arquivos.
-
-Os arquivos de protocolo do cliente ficam em:
-
-```text
-client/protocols/
-```
-
-Eles representam a camada que deve conversar com o servidor:
-
-- `check_user.py`: login;
-- `record_data.py`: criação de conta;
-- `open_data.py`: listagem e abertura de dados;
-- `file_handler.py`: upload, download e exclusão;
-- `creators/mkdir.py`: criação de pastas.
-
 ## Protocolo de Comunicação
 
-A comunicação entre cliente e servidor é feita com JSON sobre sockets TCP.
+A comunicação é feita com JSON sobre sockets TCP. Toda requisição possui um campo `"command"` e os dados necessários. O servidor responde com um JSON contendo `"status": "success"` ou `"status": "error"`.
 
-Toda requisição possui o campo `command`:
+### Comandos Suportados
 
-```json
-{
-  "command": "nome_do_comando"
-}
-```
+- `create_account`
+- `login`
+- `list_folder`
+- `create_folder`
+- `read_file`
+- `delete_file`
+- `upload_file`
+- `download_file`
 
-Resposta de sucesso:
-
-```json
-{
-  "status": "success"
-}
-```
-
-Resposta de erro:
-
-```json
-{
-  "status": "error",
-  "message": "Descrição do erro."
-}
-```
-
-## Comandos Implementados no Servidor
+<details>
+<summary><b>Clique para ver a Documentação Detalhada do Protocolo</b></summary>
 
 ### Criar Conta
-
-Cria um novo usuário e uma pasta exclusiva para ele.
-
-```json
-{
-  "command": "create_account",
-  "username": "ana",
-  "password": "123"
-}
-```
-
-Resposta:
-
-```json
-{
-  "status": "success",
-  "message": "Conta criada com sucesso."
-}
-```
+- **Comando:** `create_account`
+- **Payload:** `{"username": "ana", "password": "123"}`
 
 ### Login
-
-Verifica usuário e senha.
-
-```json
-{
-  "command": "login",
-  "username": "ana",
-  "password": "123"
-}
-```
-
-Resposta:
-
-```json
-{
-  "status": "success",
-  "message": "Login bem-sucedido."
-}
-```
+- **Comando:** `login`
+- **Payload:** `{"username": "ana", "password": "123"}`
 
 ### Listar Pasta
-
-Lista arquivos e pastas dentro do espaço do usuário.
-
-```json
-{
-  "command": "list_folder",
-  "username": "ana",
-  "path": ""
-}
-```
-
-Resposta:
-
-```json
-{
-  "status": "success",
-  "data": {
-    "name": ["Documentos", "nota.txt"],
-    "size": ["0 itens", "12 bytes"],
-    "type": ["pasta", "arquivo"]
-  }
-}
-```
-
-O campo `path` é relativo à pasta do usuário. Para listar a raiz, use `""`.
+- **Comando:** `list_folder`
+- **Payload:** `{"username": "ana", "path": ""}` (path vazio para a raiz)
 
 ### Criar Pasta
-
-Cria uma pasta dentro do espaço do usuário.
-
-```json
-{
-  "command": "create_folder",
-  "username": "ana",
-  "path": "",
-  "folder_name": "Documentos"
-}
-```
-
-Também são aceitos `folderName` ou `name` no lugar de `folder_name`.
-
-Resposta:
-
-```json
-{
-  "status": "success",
-  "message": "Pasta criada com sucesso."
-}
-```
+- **Comando:** `create_folder`
+- **Payload:** `{"username": "ana", "path": "", "folder_name": "Documentos"}`
 
 ### Ler Arquivo
-
-Lê o conteúdo textual de um arquivo UTF-8.
-
-```json
-{
-  "command": "read_file",
-  "username": "ana",
-  "path": "Documentos/nota.txt"
-}
-```
-
-Resposta:
-
-```json
-{
-  "status": "success",
-  "data": "Conteúdo do arquivo"
-}
-```
-
-Esse comando é indicado para visualizar arquivos de texto. Para baixar qualquer tipo de arquivo, use `download_file`.
+- **Comando:** `read_file`
+- **Payload:** `{"username": "ana", "path": "Documentos/nota.txt"}`
 
 ### Apagar Arquivo
-
-Remove um arquivo do usuário.
-
-```json
-{
-  "command": "delete_file",
-  "username": "ana",
-  "path": "Documentos/nota.txt"
-}
-```
-
-Resposta:
-
-```json
-{
-  "status": "success",
-  "message": "Arquivo apagado com sucesso."
-}
-```
-
-Esse comando apaga apenas arquivos. Ele não remove pastas.
+- **Comando:** `delete_file`
+- **Payload:** `{"username": "ana", "path": "Documentos/nota.txt"}`
 
 ### Upload de Arquivo
-
-Salva no servidor um arquivo enviado pelo cliente.
-
-Upload de texto:
-
-```json
-{
-  "command": "upload_file",
-  "username": "ana",
-  "path": "Documentos/nota.txt",
-  "content": "Conteúdo do arquivo"
-}
-```
-
-Upload binário usando Base64:
-
-```json
-{
-  "command": "upload_file",
-  "username": "ana",
-  "path": "imagem.png",
-  "content": "BASE64_DO_ARQUIVO",
-  "encoding": "base64"
-}
-```
-
-Também é possível informar pasta e nome separadamente:
-
-```json
-{
-  "command": "upload_file",
-  "username": "ana",
-  "path": "Documentos",
-  "file_name": "nota.txt",
-  "content": "Texto"
-}
-```
-
-Também são aceitos `fileName` ou `name` no lugar de `file_name`.
-
-Por padrão, o servidor não sobrescreve arquivos existentes. Para permitir sobrescrita:
-
-```json
-{
-  "command": "upload_file",
-  "username": "ana",
-  "path": "Documentos/nota.txt",
-  "content": "Novo conteúdo",
-  "overwrite": true
-}
-```
-
-Resposta:
-
-```json
-{
-  "status": "success",
-  "message": "Arquivo enviado com sucesso.",
-  "size": 13
-}
-```
+- **Comando:** `upload_file`
+- **Payload:** `{"username": "ana", "path": "imagem.png", "content": "BASE64_DO_ARQUIVO", "encoding": "base64"}`
 
 ### Download de Arquivo
+- **Comando:** `download_file`
+- **Payload:** `{"username": "ana", "path": "Documentos/nota.txt"}`
 
-Retorna um arquivo do servidor codificado em Base64.
+</details>
 
-```json
-{
-  "command": "download_file",
-  "username": "ana",
-  "path": "Documentos/nota.txt"
-}
-```
+<br>
 
-Resposta:
+<details>
+<summary><b>Clique para ver as Instruções de Configuração do Ambiente (VirtualBox + Debian)</b></summary>
 
-```json
-{
-  "status": "success",
-  "file_name": "nota.txt",
-  "size": 13,
-  "encoding": "base64",
-  "data": "Q29udGV1ZG8="
-}
-```
+## Parte 1: Configuração da VM (Passo único por VM)
 
-O cliente deve decodificar `data` de Base64 e salvar os bytes no disco da VM cliente.
+Estes passos são necessários para AMBAS as máquinas virtuais (servidor e cliente).
 
-## Segurança de Caminhos
+### 1.1. Habilitar Repositórios Adicionais do Debian
 
-Todas as operações de arquivo usam caminhos relativos à pasta do usuário.
+1.  Edite o arquivo `/etc/apt/sources.list` e adicione `contrib non-free non-free-firmware` ao final de cada linha `deb`.
+2.  Rode `sudo apt update`.
 
-O servidor bloqueia tentativas de acessar arquivos fora dessa pasta, como:
+### 1.2. Instalar o VirtualBox Guest Additions
 
-```json
-{
-  "command": "read_file",
-  "username": "ana",
-  "path": "../users.json"
-}
-```
+1.  **Instale as dependências:** `sudo apt install -y build-essential dkms linux-headers-$(uname -r)`.
+2.  No menu da VM, vá em **Dispositivos > Inserir imagem de CD dos Adicionais para Convidado...**.
+3.  **Monte e execute:** `sudo mount /dev/cdrom /media/cdrom` e depois `sudo sh /media/cdrom/VBoxLinuxAdditions.run`.
 
-Resposta esperada:
+### 1.3. Configurar Pasta Compartilhada
 
-```json
-{
-  "status": "error",
-  "message": "Caminho inválido."
-}
-```
+1.  **No VirtualBox:** Vá em **Configurações da VM > Pastas Compartilhadas** e adicione a pasta raiz do projeto, marcando "Montar Automaticamente" e "Tornar Permanente". Dê um nome simples (ex: `projeto_drive`).
+2.  **Na VM:** Crie o grupo `vboxsf` (`sudo groupadd vboxsf`), adicione seu usuário a ele (`sudo adduser $USER vboxsf`) e reinicie (`sudo reboot`).
 
-Essa validação impede que o cliente acesse arquivos internos do servidor ou arquivos de outros usuários.
+## Parte 2: Instalação de Dependências do Cliente
 
+Estes passos são necessários **apenas na VM do Cliente**.
+
+### 2.1. Instalar Ambiente Gráfico
+
+Se sua VM está em modo texto, instale uma interface gráfica.
+1.  **Instale o Xfce:** `sudo apt install -y xfce4 xfce4-goodies`.
+2.  **Reinicie:** `sudo reboot`. A VM iniciará em modo gráfico.
+3.  **Solução de Problemas:** Se a UI não abrir com erro de `no display`, use o comando `startx` para forçar o início do ambiente gráfico e abra um terminal de dentro dele.
+
+### 2.2. Instalar Pacotes Python
+
+1.  **Instale o `pip` e o `tkinter`:** `sudo apt install -y python3-pip python3-tk`.
+2.  **Instale as bibliotecas da UI:**
+    ```bash
+    pip3 install Pillow --break-system-packages
+    pip3 install CTkMessagebox --break-system-packages
+    ```
+</details>

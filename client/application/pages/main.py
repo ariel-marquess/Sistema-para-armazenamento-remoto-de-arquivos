@@ -24,6 +24,7 @@ class Main(ctk.CTk):
         self.grid_rowconfigure(1, weight=1)
 
         self.container = None
+        self.dashboard_instance = None # Para guardar a referência do dashboard
         self.start_login()
 
 
@@ -44,14 +45,18 @@ class Main(ctk.CTk):
             master=self,
             open_login=self.start_login)
 
-    def start_dashboard(self, data, rootPath):
+    def start_dashboard(self, session_data):
+        """
+        Inicia o Dashboard, passando os dados da sessão (username e conteúdo da pasta).
+        """
         if self.container is not None:
             self.container.destroy()
 
-        self.container = Dashboard(
+        # Cria e armazena a instância do Dashboard
+        self.dashboard_instance = Dashboard(
             master=self,
-            content=data,
-            path=rootPath)
+            session_data=session_data)
+        self.container = self.dashboard_instance
 
     def center_window(self, width, heigth):
         screen_width = self.winfo_screenwidth()

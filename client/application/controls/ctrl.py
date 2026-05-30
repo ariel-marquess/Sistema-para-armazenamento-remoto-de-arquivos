@@ -2,121 +2,88 @@ import client.application.utils.ul as util
 import client.application.pages.dashboard.sessions.descriptionFile as dfile
 import client.application.pages.dashboard.sessions.descriptionFolders as dfolder
 
-import client.protocols.file_handler as file
-import client.protocols.open_data as openData
-import client.protocols.check_user as checkUser # Importa o protocolo de verificação
-import client.protocols.record_data as recordData # Importa o protocolo de registro
-import client.protocols.creators.mkdir as mk
+import client.protocols.file_handler as file_handler
+import client.protocols.open_data as open_data
+import client.protocols.check_user as check_user
+import client.protocols.record_data as record_data
+import client.protocols.creators.mkdir as mkdir
 
+# --- Funções de Manipulação de Arquivos ---
 
-def upload(path):
+def upload(username, destination_path=""):
+    """Controla o fluxo de upload de um arquivo."""
     try:
-        file.uploadFile(path)
-
-        util.MessageBox(
-            title="Upload realizado com sucesso",
-            message="O arquivo foi enviado para o servidor.",
-            icon="info"
-        )
+        if file_handler.uploadFile(username, destination_path):
+            util.MessageBox(title="Upload Concluído", message="O arquivo foi enviado para o servidor.", icon="info")
+            return True
     except Exception as e:
-        util.MessageBox(
-            title="Não foi possível realizar o upload",
-            message=f"ERRO: {e}",
-            icon="warning"
-        )
+        util.MessageBox(title="Erro no Upload", message=f"ERRO: {e}", icon="warning")
+    return False
 
-def download(path):
+def download(username, path):
+    """Controla o fluxo de download de um arquivo."""
     try:
-        file.downloadFile(path)
-
-        util.MessageBox(
-            title="Download realizado com sucesso",
-            message="O arquivo foi baixado em sua máquina.",
-            icon="info"
-        )
+        if file_handler.downloadFile(username, path):
+            util.MessageBox(title="Download Concluído", message="O arquivo foi salvo em sua máquina.", icon="info")
     except Exception as e:
-        util.MessageBox(
-            title="Não foi possível realizar o download",
-            message=f"ERRO: {e}",
-            icon="warning"
-        )
+        util.MessageBox(title="Erro no Download", message=f"ERRO: {e}", icon="warning")
 
-
-def delete(container, path):
+def delete(username, path):
+    """Controla o fluxo de exclusão de um arquivo."""
     try:
-        file.deleteFile(path)
-        container.destroy()
-
-        util.MessageBox(
-            title="Arquivo apagado com sucesso",
-            message="O arquivo foi deletado do servidor.",
-            icon="info"
-        )
+        if file_handler.deleteFile(username, path):
+            util.MessageBox(title="Arquivo Apagado", message="O arquivo foi deletado do servidor.", icon="info")
+            return True
     except Exception as e:
-        util.MessageBox(
-            title="Não foi possível apagar o arquivo",
-            message=f"ERRO: {e}",
-            icon="warning"
-        )
+        util.MessageBox(title="Erro ao Apagar", message=f"ERRO: {e}", icon="warning")
+    return False
 
-
-def createFolder(path, name, master, currentSession):
+def createFolder(username, path, name):
+    """Controla o fluxo de criação de uma nova pasta."""
     try:
-        mk.mkdir(path, name)
-
-        content_descriptionPath = openData.openFolder(path)
-        currentSession.destroy()
-        descriptionFolder.session_descriptionFolder(master, content_descriptionPath)
+        if mkdir.mkdir(username, path, name):
+            util.MessageBox(title="Pasta Criada", message=f"A pasta '{name}' foi criada com sucesso.", icon="info")
+            return True
     except Exception as e:
-        util.MessageBox(
-            title="Problema na criação da pasta",
-            message=f"ERRO: {e}",
-            icon="warning"
-        )
+        util.MessageBox(title="Erro ao Criar Pasta", message=f"ERRO: {e}", icon="warning")
+    return False
 
+# --- Funções de Navegação ---
 
-def openFolder(master, objPath, currentSession=None):
+def openFolder(master, currentSession, username, objPath):
+    """Abre uma pasta, buscando seu conteúdo no servidor e recriando a sessão de visualização."""
     try:
-        if currentSession:
-            currentSession.destroy()
-
-        content_descriptionPath = openData.openFolder(objPath.getPath())
-        dfolder.session_descriptionFolder(master, content_descriptionPath, objPath)
+        path = objPath.get_current_path()
+        content = open_data.openFolder(username, path)
+        
+        if content:
+            if currentSession and currentSession.winfo_exists():
+                currentSession.destroy()
+            # Recria a sessão de pastas com o novo conteúdo
+            dfolder.Folders(master, content, objPath)
     except Exception as e:
-        util.MessageBox(
-            title="Problema na abertura da pasta",
-            message=f"ERRO: {e}",
-            icon="warning"
-        )
+        util.MessageBox(title="Problema na Abertura da Pasta", message=f"ERRO: {e}", icon="warning")
 
-
-def openFile(master, objPath, currentSession=None):
+def openFile(master, currentSession, username, objPath):
+    """Abre um arquivo, buscando seu conteúdo no servidor e recriando a sessão de visualização."""
     try:
-        if currentSession:
-            currentSession.destroy()
+        path = objPath.get_current_path()
+        content = open_data.openFile(username, path)
 
-        content_file = openData.openFile(objPath.getPath())
-        dfile.session_contentFile(master, content_file, objPath.getPath())
+        if content:
+            if currentSession and currentSession.winfo_exists():
+                currentSession.destroy()
+            # Recria a sessão de visualização de arquivo
+            dfile.File(master, content, path)
     except Exception as e:
-        util.MessageBox(
-            title="Problema na abertura do arquivo",
-            message=f"ERRO: {e}",
-            icon="warning"
-        )
+        util.MessageBox(title="Problema na Abertura do Arquivo", message=f"ERRO: {e}", icon="warning")
 
 # --- Funções de Autenticação ---
 
 def isUser(username, password):
-    """
-    Chama o protocolo para verificar se o usuário e a senha são válidos.
-    """
-    return checkUser.isUser(username, password)
+    """Chama o protocolo para verificar se o usuário e a senha são válidos."""
+    return check_user.isUser(username, password)
 
 def record(obj):
-    """
-    Chama o protocolo para registrar um novo usuário.
-    """
-    return recordData.record(obj)
-
-def rootPath(username):
-    return openData.rootPath(username)
+    """Chama o protocolo para registrar um novo usuário."""
+    return record_data.record(obj)

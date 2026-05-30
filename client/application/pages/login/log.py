@@ -1,7 +1,8 @@
 import customtkinter as ctk
 
 import client.application.utils.ul as util
-import client.application.controls.ctrl as ctrl # Importando os controles
+import client.application.controls.ctrl as ctrl 
+import client.protocols.open_data as openData # Importa o protocolo para buscar os dados iniciais
 
 class Login(ctk.CTkFrame):
     def __init__(self, master, open_create, open_dashboard):
@@ -19,8 +20,8 @@ class Login(ctk.CTkFrame):
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(4, weight=1)
 
-        self.open_create = open_create  # Guardando função para abrir a página de 'criar conta'
-        self.open_dashboard = open_dashboard  # Guardando metodo para abrir a página principal do programa
+        self.open_create = open_create
+        self.open_dashboard = open_dashboard
 
         # Estilos do texto
         self.textFont = util.font(14)
@@ -38,7 +39,6 @@ class Login(ctk.CTkFrame):
         # Adicionando os componentes para inserção da identificação de usuário
         self.label_login = ctk.CTkLabel(self.container, text="Login", font=self.textFont, text_color=self.textColor)
         self.label_login.grid(row=0, column=0, pady=0, sticky="w")
-
         self.entry_username = ctk.CTkEntry(self.container, placeholder_text="Se estiver testando os gráficos, deixe em branco.")
         self.entry_username.grid(row=1, column=0, pady=5, sticky="ew")
         self.entry_username.bind("<Return>", lambda e: self.enter())
@@ -46,6 +46,8 @@ class Login(ctk.CTkFrame):
         # Adicionando os componentes para inserção da senha
         self.label_password = ctk.CTkLabel(self.container, text="Senha", font=self.textFont, text_color=self.textColor)
         self.label_password.grid(row=3, column=0, pady=(10, 0), sticky="w")
+        self.entry_password = ctk.CTkEntry(self.container, show="*", placeholder_text="Se estiver testando os gráficos, deixe em branco.")
+        self.entry_password.grid(row=4, column=0, pady=5, sticky="ew")
 
         self.container_password = ctk.CTkFrame(self.container, fg_color="transparent")
         self.container_password.grid(row=4, column=0, pady=5, sticky="nsew")
@@ -66,25 +68,13 @@ class Login(ctk.CTkFrame):
         self.button_create = ctk.CTkButton(self, text="Não tem conta?", fg_color="#2b2f76", text_color=self.textColor, command=self.create_account)    # Botão de 'criar conta'
         self.button_create.grid(row=5, column=2, padx=20, pady=20, sticky="se")
 
-
-    def reveal_password(self):  # Método para revelar ou esconder a senha digitada
-        if self.entry_password.cget("show") == "*":
-            self.button_password.configure(image=util.images("eclosed"))
-            self.entry_password.configure(show="")
-        else:
-            self.button_password.configure(image=util.images("eopen"))
-            self.entry_password.configure(show="*")
-
-
-    def create_account(self):  # Método para abrir a página de "Criar conta"
+    def create_account(self):
         self.destroy()
         self.open_create()
 
-
-    def dashboard(self, data, path):
+    def dashboard(self, session_data):
         self.destroy()
-        self.open_dashboard(data, path)
-
+        self.open_dashboard(session_data)
 
     def enter(self):
         username = self.entry_username.get()
@@ -92,35 +82,36 @@ class Login(ctk.CTkFrame):
 
         if username != "" and password != "":
             if ctrl.isUser(username, password):
-                # A lógica para buscar os dados do dashboard ainda precisa ser implementada
-                # Por enquanto, passamos dados de exemplo.
-                mock_data = {
-                    'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
-                    'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
-                    'type': ['pasta', 'pasta', 'pasta', 'arquivo']
-                }
-
-
-                self.dashboard(mock_data, ctrl.rootPath(username))
+                # Login bem-sucedido, busca os dados da pasta raiz do usuário
+                root_content = openData.openFolder(username, "") # "" para a raiz
+                
+                if root_content is not None:
+                    session_data = {
+                        "username": username,
+                        "content": root_content
+                    }
+                    self.dashboard(session_data)
+                else:
+                    util.MessageBox(
+                        title="Erro ao Carregar Dados",
+                        message="ERRO: Não foi possível carregar os arquivos do usuário após o login.",
+                        icon="warning"
+                    )
             else:
                 util.MessageBox(
-                    title="Inconsistência de dados",
+                    title="Inconsistência de Dados",
                     message="ERRO: usuário ou senha incorretos.",
                     icon="warning"
                 )
         else:
+            # Mantém a lógica de teste se os campos estiverem vazios
             mock_data = {
                 'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
                 'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
                 'type': ['pasta', 'pasta', 'pasta', 'arquivo']
             }
-            self.dashboard(mock_data, None)
-            """
-            Ao finalizar o programa este bloco ficará com o seguinte código:
-            
-            util.MessageBox(
-                title="Campos vazios",
-                message="ERRO: Preencha todos os campos.",
-                icon="warning"
-            )
-            """
+            session_data = {
+                "username": "tester",
+                "content": mock_data
+            }
+            self.dashboard(session_data)
