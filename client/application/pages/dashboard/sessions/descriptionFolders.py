@@ -102,10 +102,9 @@ class Folders(ctk.CTkScrollableFrame):
             username = self.master.get_username()
 
             if sort == "pasta":
-                ctrl.openFolder(self.master, self, username, self.objPath)
+                self.master.navigate_to_current_path()
             else:
                 ctrl.openFile(self.master, self, username, self.objPath)
-                self.objPath.go_back()
         except Exception as e:
             util.MessageBox(
                 title="Problema de execussão",
