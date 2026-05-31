@@ -13,6 +13,10 @@ class Path:
         """Retorna o caminho atual (o último item do histórico)."""
         return self.history[-1]
 
+    def get_root_path(self):
+        """Retorna o caminho raiz."""
+        return self.root_path
+
     def join(self, folder_name):
         """Avança para uma subpasta e adiciona ao histórico."""
         current = self.get_current_path()

@@ -43,10 +43,13 @@ class Dashboard(ctk.CTkFrame):
         Método central para navegação. Busca o conteúdo do caminho atual no objPath
         e recria as sessões da interface para exibir o novo conteúdo.
         """
-        path = self.objPath.get_current_path()
-        content = open_data.openFolder(self.username, path)
-        if content:
-            self.description_session = dfolder.Folders(self, content, self.objPath)
+        currentPath = self.objPath.get_current_path()
+        rootPath = self.objPath.get_root_path()
+        content_currentPath = open_data.openFolder(self.username, currentPath)
+        content_rootPath = open_data.openFolder(self.username, rootPath)
+        if content_currentPath and content_rootPath:
+            self.description_session = dfolder.Folders(self, content_currentPath, self.objPath)
+            self.root_folder_session = rfolder.RootFolders(self, content_rootPath, self.objPath)
 
     def get_username(self):
         """Método para que outras partes da UI possam acessar o username logado."""
