@@ -39,22 +39,20 @@ class Login(ctk.CTkFrame):
         # Adicionando os componentes para inserção da identificação de usuário
         self.label_login = ctk.CTkLabel(self.container, text="Login", font=self.textFont, text_color=self.textColor)
         self.label_login.grid(row=0, column=0, pady=0, sticky="w")
-        self.entry_username = ctk.CTkEntry(self.container, placeholder_text="Se estiver testando os gráficos, deixe em branco.")
+        self.entry_username = ctk.CTkEntry(self.container, placeholder_text="Digite seu nome de usuário")
         self.entry_username.grid(row=1, column=0, pady=5, sticky="ew")
         self.entry_username.bind("<Return>", lambda e: self.enter())
 
         # Adicionando os componentes para inserção da senha
         self.label_password = ctk.CTkLabel(self.container, text="Senha", font=self.textFont, text_color=self.textColor)
         self.label_password.grid(row=3, column=0, pady=(10, 0), sticky="w")
-        self.entry_password = ctk.CTkEntry(self.container, show="*", placeholder_text="Se estiver testando os gráficos, deixe em branco.")
-        self.entry_password.grid(row=4, column=0, pady=5, sticky="ew")
 
         self.container_password = ctk.CTkFrame(self.container, fg_color="transparent")
         self.container_password.grid(row=4, column=0, pady=5, sticky="nsew")
         self.container_password.grid_columnconfigure(0, weight=1)
         self.container_password.grid_columnconfigure(1, weight=0)
 
-        self.entry_password = ctk.CTkEntry(self.container_password, show="*", placeholder_text="Se estiver testando os gráficos, deixe em branco.")
+        self.entry_password = ctk.CTkEntry(self.container_password, show="*", placeholder_text="Digite sua senha")
         self.entry_password.grid(row=0, column=0, padx=(0, 5), sticky="ew")
         self.entry_password.bind("<Return>", lambda e: self.enter())
 
@@ -67,6 +65,14 @@ class Login(ctk.CTkFrame):
 
         self.button_create = ctk.CTkButton(self, text="Não tem conta?", fg_color="#2b2f76", text_color=self.textColor, command=self.create_account)    # Botão de 'criar conta'
         self.button_create.grid(row=5, column=2, padx=20, pady=20, sticky="se")
+
+    def reveal_password(self):
+        if self.entry_password.cget("show") == "*":
+            self.entry_password.configure(show="")
+            self.button_password.configure(image=util.images("eopen"))
+        else:
+            self.entry_password.configure(show="*")
+            self.button_password.configure(image=util.images("eclosed"))
 
     def create_account(self):
         self.destroy()
@@ -104,14 +110,8 @@ class Login(ctk.CTkFrame):
                     icon="warning"
                 )
         else:
-            # Mantém a lógica de teste se os campos estiverem vazios
-            mock_data = {
-                'name': ['Downloads', 'Documentos', 'Imagens', 'curriculo.txt'],
-                'size': ['3 itens', '2 itens', '5 itens', '23 kB'],
-                'type': ['pasta', 'pasta', 'pasta', 'arquivo']
-            }
-            session_data = {
-                "username": "tester",
-                "content": mock_data
-            }
-            self.dashboard(session_data)
+            util.MessageBox(
+                title="Informações faltantes",
+                message="ERRO: preencha o login e a senha para entrar.",
+                icon="warning"
+            )

@@ -73,8 +73,7 @@ def openFile(master, currentSession, username, objPath):
         if content:
             if currentSession and currentSession.winfo_exists():
                 currentSession.destroy()
-            # Recria a sessão de visualização de arquivo
-            dfile.File(master, content, path)
+            master.description_session = dfile.File(master, content, path, username)
     except Exception as e:
         util.MessageBox(title="Problema na Abertura do Arquivo", message=f"ERRO: {e}", icon="warning")
 

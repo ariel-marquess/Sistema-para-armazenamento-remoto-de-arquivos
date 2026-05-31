@@ -44,7 +44,7 @@ class RootFolders(ctk.CTkFrame):
                     self.row_rootFolder += 1
 
         # Adicionando botão de "fazer upload"
-        self.button_upload = ctk.CTkButton(self, text="Fazer upload", fg_color="#2b2f76", text_color=self.textColor, command=self.perform_upload)
+        self.button_upload = ctk.CTkButton(self, text="Fazer upload", fg_color="#2b2f76", text_color=self.textColor, command=self.upload_action)
         self.button_upload.grid(row=self.row_rootFolder, column=0, pady=20, sticky="s")
         self.rowconfigure(self.row_rootFolder, weight=1)
 
@@ -74,8 +74,7 @@ class RootFolders(ctk.CTkFrame):
         username = self.master.get_username()
         current_path = self.objPath.get_current_path()
         if ctrl.upload(username, current_path):
-            # A lógica de atualização precisa ser revista
-            pass
+            self.master.navigate_to_current_path()
 
     def actionClick(self, event, forced_widget=None):
         try:
@@ -97,19 +96,6 @@ class RootFolders(ctk.CTkFrame):
                 message=f"ERRO: {e}",
                 icon="warning"
             )
-
-
-    def perform_upload(self):
-        if self.objPath.splitext():
-            # Abrir página ou menu de upload
-            pass
-        else:
-            util.MessageBox(
-                title="O diretório atual não é uma pasta",
-                message="Não foi possível realizar upload porque o diretório atual é um arquivo. Caso ainda queira realizar o upload, selecione uma pasta.",
-                icon="info"
-            )
-
 
     def toGoBack(self):
         try:

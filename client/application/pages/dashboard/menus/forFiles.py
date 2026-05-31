@@ -51,7 +51,7 @@ class menuFile(ctk.CTkFrame):
 
     def execute_and_destroy(self, func, args, widget_to_delete=None):
         """Executa a função de controle e depois destrói o menu e o widget do arquivo, se aplicável."""
-        if func(*args): # Se a função de controle retornar True (sucesso)
-            if widget_to_delete:
-                widget_to_delete.destroy()
+        dashboard = self.master.master
+        if func(*args):
+            dashboard.navigate_to_current_path()
         self.destroy()

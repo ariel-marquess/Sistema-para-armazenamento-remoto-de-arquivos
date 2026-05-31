@@ -46,9 +46,6 @@ class Folders(ctk.CTkScrollableFrame):
         self.label_contentType = ctk.CTkLabel(self.container_descriptionContent, text="Tipo", font=self.textFont, text_color=self.textColor)
         self.label_contentType.grid(row=0, column=2)
 
-        for i in range(len(content["name"])):
-            self.descriptionFolder(content["name"][i], content["size"][i], content["type"][i], i + 1)
-
         # Renderiza os itens da pasta
         if content and content.get("name"):
             for i in range(len(content["name"])):
@@ -75,12 +72,17 @@ class Folders(ctk.CTkScrollableFrame):
         # O 'forced_widget=container' garante que a função sempre receba o container principal
         for component in container.winfo_children():
             component.bind("<Button-1>", lambda e, c=container: self.actionClick(e, forced_widget=c))
-            component.bind("<Button-3>", lambda e, c=container: self.open_menuFile(e, forced_widget=c))
+            if sort == "pasta":
+                component.bind("<Button-3>", lambda e: self.open_menuFolder(e))
+            else:
+                component.bind("<Button-3>", lambda e, c=container: self.open_menuFile(e, forced_widget=c))
             component.bind("<Enter>", lambda e, c=container: self.change_background(e, c, "#313131"))
             component.bind("<Leave>", lambda e, c=container: self.change_background(e, c, "transparent"))
-        
-        # O bind no container pai também é uma boa prática como fallback
-        container.bind("<Button-3>", lambda e, c=container: self.open_menuFile(e, forced_widget=c))
+
+        if sort == "pasta":
+            container.bind("<Button-3>", lambda e: self.open_menuFolder(e))
+        else:
+            container.bind("<Button-3>", lambda e, c=container: self.open_menuFile(e, forced_widget=c))
 
         self.containers_description.append(container)
 
@@ -97,11 +99,13 @@ class Folders(ctk.CTkScrollableFrame):
             sort = childrens[2].cget('text')
 
             self.objPath.join(name)
+            username = self.master.get_username()
 
             if sort == "pasta":
-                ctrl.openFolder(self.master, self, self.objPath)     # Tenho que adicionar o caminho da pasta
+                self.master.navigate_to_current_path()
             elif sort == "arquivo":
-                ctrl.openFile(self.master, self, self.objPath)
+                ctrl.openFile(self.master, self, username, self.objPath)
+                self.objPath.go_back()
         except Exception as e:
             util.MessageBox(
                 title="Problema de execussão",
@@ -125,7 +129,7 @@ class Folders(ctk.CTkScrollableFrame):
             self,   # É a referência do descriptionFolder
             self.menu,    # Indica o local (na máquina) onde o menu será criado
             event,    # Indica o evento que disparou o método
-            self.objPath.getPath())
+            self.objPath.get_current_path())
 
     def open_menuFile(self, event, forced_widget=None):
         if self.menu is not None and self.menu.winfo_exists():
