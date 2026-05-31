@@ -46,7 +46,7 @@ class Dashboard(ctk.CTkFrame):
         path = self.objPath.get_current_path()
         content = open_data.openFolder(self.username, path)
         if content:
-            self.create_sessions(content)
+            self.description_session = dfolder.Folders(self, content, self.objPath)
 
     def get_username(self):
         """Método para que outras partes da UI possam acessar o username logado."""

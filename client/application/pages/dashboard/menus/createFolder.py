@@ -42,7 +42,7 @@ class CreateFolder(ctk.CTkFrame):
         username = self.dashboard.get_username() # Usa a referência correta para o Dashboard
 
         if folder_name != "":
-            if ctrl.createFolder(username, self.currentPath, folder_name):
+            if ctrl.createFolder(username, self.objPath.get_current_path(), folder_name):
                 # Se a criação for bem-sucedida, atualiza a visualização
                 ctrl.openFolder(self.dashboard, self.currentSession, username, self.objPath)
             self.destroy()

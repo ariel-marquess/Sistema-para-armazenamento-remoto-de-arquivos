@@ -89,7 +89,8 @@ class RootFolders(ctk.CTkFrame):
             self.objPath.go_to_root_and_join(name)
             
             # Pede ao Dashboard para atualizar a tela
-            self.master.navigate_to_current_path()
+            username = self.master.get_username()
+            ctrl.openFolder(self.master, self, username, self.objPath)
         except Exception as e:
             util.MessageBox(
                 title="Não foi possível abrir a pasta",

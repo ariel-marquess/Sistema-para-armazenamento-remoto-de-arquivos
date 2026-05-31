@@ -29,7 +29,7 @@ class menuFile(ctk.CTkFrame):
             pathClicked = os.path.join(current_folder_path, name)
             
             # Obtendo o username a partir da instância do Dashboard de forma segura
-            dashboard = self.master.master
+            dashboard = self.master
             username = dashboard.get_username()
 
             self.configure(fg_color="#393939", corner_radius=10, border_width=1, width=100)
