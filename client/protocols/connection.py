@@ -2,7 +2,7 @@ import socket
 import json
 
 # Configurações centralizadas de conexão com o servidor
-SERVER_ADDRESS = '192.168.0.2'
+SERVER_ADDRESS = '192.168.0.1'
 SERVER_PORT = 65432
 BUFFER_SIZE = 10 * 1024 * 1024 # Buffer de 10MB para suportar transferências de arquivo
 
