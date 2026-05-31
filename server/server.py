@@ -83,7 +83,7 @@ def handle_client_connection(conn, addr):
 
 def main():
     """Inicia o servidor e o loop de escuta."""
-    host = '0.0.0.0'
+    host = '192.168.0.1'
     port = 65432
 
     # Garante que o diretório de armazenamento principal exista
