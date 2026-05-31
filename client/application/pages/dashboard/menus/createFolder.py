@@ -5,12 +5,12 @@ import client.application.utils.ul as util
 import client.application.pages.dashboard.menus.common.cmn as common
 
 class CreateFolder(ctk.CTkFrame):
-    def __init__(self, master, currentSession, currentPath):
+    def __init__(self, master, currentSession, objPath):
         # master aqui é o Dashboard
         super().__init__(master)
         self.dashboard = master 
         self.currentSession = currentSession
-        self.currentPath = currentPath
+        self.objPath = objPath
 
         # Estilos do texto
         self.textColor = "white"
@@ -23,9 +23,9 @@ class CreateFolder(ctk.CTkFrame):
 
         self.entry = ctk.CTkEntry(self, placeholder_text="Digite o nome da pasta...")
         self.entry.grid(row=1, column=0, padx=10, pady=5, sticky="ew")
-        self.entry.bind("<Return>", lambda e, cs, cp: self.actionClick(cs, cp))
+        self.entry.bind("<Return>", lambda: self.actionClick())
 
-        self.container_buttons = ctk.CTkFrame(self, fg_color="transparent", text_color=self.textColor)
+        self.container_buttons = ctk.CTkFrame(self, fg_color="transparent")
         self.container_buttons.grid(row=2, column=0, pady=5)
 
         self.canceler = ctk.CTkButton(self.container_buttons, text="Cancelar", fg_color="#2b2f76", width=0, height=0, command=self.destroy)
@@ -44,7 +44,7 @@ class CreateFolder(ctk.CTkFrame):
         if folder_name != "":
             if ctrl.createFolder(username, self.currentPath, folder_name):
                 # Se a criação for bem-sucedida, atualiza a visualização
-                ctrl.openFolder(self.dashboard, self.currentSession, username)
+                ctrl.openFolder(self.dashboard, self.currentSession, username, self.objPath)
             self.destroy()
         else:
             self.entry.focus()
